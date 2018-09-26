@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta charset="utf-8">
+
+<meta name="description" content="User index">
+<meta name="keywords" content="User index">
+
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>成都半雪网络科技挪车码</title>
+
+<link href="css/chep.css" rel="stylesheet" type="text/css"/>
+
+</head>
+<body style="background-color:#f4f4f4;" >
+<div id="_main" class="main" style="width:100%;background-color:#f4f4f4;">
+	<div id="_logo" class="_logo" style="width:100%;">
+		<img id="" src="img/_head.png" style="width:100%;height:100%;"/>
+	</div>
+	<div class="_content" style="width:100%;">
+		<div class="_top" style="width:100%;height:100%;background-color:white;text-align:center;">
+			<div class="_top_main">
+				<div style="">
+					<label style="">您是第一次使用，请先进行绑定。</label>
+				</div>
+				<div style="margin-top:20px;border-bottom: 1px solid aliceblue;">NO:888888</div>
+				<div style="margin-top:20px;font-size:14px;border-bottom: 1px solid aliceblue;"><input type="text" id="_phoneNo" value="手机号码" placeholder="" style="width:100px;height:24px;border:0px solid #dc5d41;border-bottom:1px solid #dc5d41;font-size:16px;" /><button style="width:40px;height:24px;background-color:#ec5224;">获取</button></div>
+				<div style="margin-top:20px;border-bottom: 1px solid aliceblue;"><input type="text" id="_phoneNo" value="" placeholder="请输入验证码" style="width:140px;height:24px;border:0px solid #dc5d41;border-bottom:1px solid #dc5d41;font-size:16px;" /></div>
+				
+				<div style="margin-top:20px;font-size:14px;">请选择您的车牌号：</div>
+				<div class="car_input" style="">
+					<ul class="clearfix ul_input"><li class="input_pro"><span></span></li><li class="input_pp input_zim"><span></span></li><li class="input_pp"><span></span></li><li class="input_pp"><span></span></li><li class="input_pp"><span></span></li><li class="input_pp"><span></span></li><li class="input_pp"><span></span></li></ul>
+				</div>
+				<button style="width: 50%;height: 24px;border: none;background-color: #dc5d41;color: #fff;border-radius: 5px;margin-bottom:5px;">绑定</button>
+				
+				<div class="_bottom" style="font-size:12px;" >
+					温馨提示：若你未注册过本平台，将为您自动注册。
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="_bottom_comt" style="width:100%;background-color:white;">
+	</div>
+</div>
+
+
+<script type="text/javascript" src="/utils/js/jquery.min.js"></script>
+<script src="/QRCode/js/layer.js" type="text/javascript"></script>
+<script src="/QRCode/js/chepai.js" type="text/javascript"></script>
+<script type="text/javascript">
+		//获取屏幕高宽
+		var _screen={
+			width:window.screen.availWidth,
+			//height:window.screen.clientHeight 
+			height:$(window).height() 
+		};
+		window.onload=function(){ 
+			// 初始化内容 
+			//document.getElementById('_main').style.width=_screen.width-+"px";
+			
+			$('#_main').css('height',(_screen.height));
+			$('#_content').css('height',(_screen.height*0.5));
+			$('#_logo').css('height',(_screen.height*0.16));
+			$('#_bottom_comt').css('height',(_screen.height*0.34));
+			chepInit();
+		}
+		
+</script>
+</body>
+
+</html>
