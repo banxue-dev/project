@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxue.projects.mapper.ProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.banxue.projects.entity.Project">
+        <id column="pro_id" property="proId" />
+        <result column="pro_no" property="proNo" />
+        <result column="pro_name" property="proName" />
+        <result column="pro_status" property="proStatus" />
+        <result column="pro_progress" property="proProgress" />
+        <result column="plan_start_time" property="planStartTime" />
+        <result column="plan_end_time" property="planEndTime" />
+        <result column="actual_start_time" property="actualStartTime" />
+        <result column="actual_end_time" property="actualEndTime" />
+        <result column="pro_main_type" property="proMainType" />
+        <result column="relation_config" property="relationConfig" />
+        <result column="pro_parent" property="proParent" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_del" property="isDel" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+</mapper>

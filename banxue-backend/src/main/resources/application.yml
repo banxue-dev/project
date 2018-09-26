@@ -1,0 +1,20 @@
+#mybatis-plus
+mybatis-plus:
+   mapper-locations:com/banxue/*/mapper/xml/*.xml
+   type-aliases-package:com.banxue.*.entity
+spring:
+   jackson:
+      time-zone: GMT+8
+      date-format: yyyy-MM-dd HH:mm:ss
+   profiles:
+      active:dev
+   datasource:
+      url:jdbc:mysql://120.77.148.235:3306/banxue-dev?useUnicode=true&characterEncoding=utf8
+      username:feng
+      password:feng.123456
+      driver-class-name:com.mysql.jdbc.Driver
+# server
+server:
+    port:8080
+data:
+   name:21
