@@ -28,7 +28,7 @@ public class ProjectController {
 	@Value("${server.port}")
 	private String port;
 	
-	@RequestMapping("test")
+	@RequestMapping("/test")
 	@ResponseBody
 	public String test() {
 		FileLog.debugLog("你是一个二货");
