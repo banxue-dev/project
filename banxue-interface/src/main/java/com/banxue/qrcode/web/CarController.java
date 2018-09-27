@@ -31,7 +31,7 @@ public class CarController {
 	
 	@Autowired
 	private ICarService carService;
-	@PostMapping("getUserCar")
+	@PostMapping("/getUserCar")
 	@ResponseBody
 	public R getUserCar(String userPhone) {
 		try{
