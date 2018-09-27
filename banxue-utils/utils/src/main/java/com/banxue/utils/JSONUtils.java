@@ -3,7 +3,6 @@ package com.banxue.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -17,7 +16,7 @@ public class JSONUtils {
 	 */
 	public static String beanToJson(Object object, String dataFormatString) {
 		if (object != null) {
-			if (StringUtils.isEmpty(dataFormatString)) {
+			if (StringUtils.isNullString(dataFormatString)) {
 				return JSONObject.toJSONString(object);
 			}
 			return JSON.toJSONStringWithDateFormat(object, dataFormatString);
@@ -48,7 +47,7 @@ public class JSONUtils {
 	 * @return
 	 */
 	public static String stringToJsonByFastjson(String key, String value) {
-		if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value)) {
+		if (StringUtils.isNullString(key) || StringUtils.isNullString(value)) {
 			return null;
 		}
 		Map<String, String> map = new HashMap<String, String>(16);
@@ -64,7 +63,7 @@ public class JSONUtils {
 	 * @return
 	 */
 	public static Object jsonToBean(String json, Object clazz) {
-		if (StringUtils.isEmpty(json) || clazz == null) {
+		if (StringUtils.isNullString(json) || clazz == null) {
 			return null;
 		}
 		return JSON.parseObject(json, clazz.getClass());
@@ -78,7 +77,7 @@ public class JSONUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> jsonToMap(String json) {
-		if (StringUtils.isEmpty(json)) {
+		if (StringUtils.isNullString(json)) {
 			return null;
 		}
 		return JSON.parseObject(json, Map.class);
