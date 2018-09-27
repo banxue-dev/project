@@ -25,6 +25,12 @@
 	</properties>
 
 	<dependencies>
+		<!-- 引入工具包 -->
+		<dependency>
+			<groupId>com.banxue</groupId>
+			<artifactId>utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
 		<!-- 代码生成器 -->
 		<dependency>

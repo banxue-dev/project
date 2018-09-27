@@ -25,6 +25,12 @@
 	</properties>
 
 	<dependencies>
+		<!-- 引入工具包 -->
+		<dependency>
+			<groupId>com.banxue</groupId>
+			<artifactId>utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
 		<!-- 代码生成器 -->
 		<dependency>
@@ -37,6 +43,8 @@
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 		</dependency>
+		
+		<!-- 加入这个才能使用templates下面的html -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-thymeleaf</artifactId>
