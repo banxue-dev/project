@@ -9,8 +9,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.banxue.qrcode.entity.Car;
 import com.banxue.qrcode.service.ICarService;
 import com.banxue.utils.R;
+import com.banxue.utils.log.FileLog;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 
 import java.util.List;
 
@@ -31,18 +33,18 @@ public class CarController {
 	
 	@Autowired
 	private ICarService carService;
-	@PostMapping("/getUserCar")
+	@RequestMapping("/getUserCar")
 	@ResponseBody
 	public R getUserCar(String userPhone) {
 		try{
 			Wrapper<Car> wra=new EntityWrapper<Car>();
-			wra.eq("userPhone", "13524954089");
+			wra.eq("user_phone", "13524954089");
 			List<Car> lst=carService.selectList(wra);
 			return R.ok(1, "", lst);
 		}catch(Exception e) {
-			
+			FileLog.errorLog(e);
 		}
-		return null;
+		return R.error();
 	}
 
 }
