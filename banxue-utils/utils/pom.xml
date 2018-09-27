@@ -72,12 +72,6 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.31</version>
 		</dependency>
-		<!-- 代码生成器 -->
-		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-			<version>2.3</version>
-		</dependency>
 		<!-- HttpClient -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
