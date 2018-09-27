@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxue.qrcode.mapper.CarMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.banxue.qrcode.entity.Car">
+        <id column="id" property="id" />
+        <result column="car_no" property="carNo" />
+        <result column="user_phone" property="userPhone" />
+        <result column="car_firm" property="carFirm" />
+        <result column="car_brand" property="carBrand" />
+        <result column="car_model" property="carModel" />
+        <result column="is_del" property="isDel" />
+        <result column="car_color" property="carColor" />
+        <result column="car_desc" property="carDesc" />
+        <result column="create_time" property="createTime" />
+        <result column="mod_time" property="modTime" />
+    </resultMap>
+
+</mapper>
