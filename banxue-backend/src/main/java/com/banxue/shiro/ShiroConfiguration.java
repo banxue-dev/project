@@ -41,7 +41,7 @@ public class ShiroConfiguration {
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");
         // 未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
 
         //自定义拦截器
 //        Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();

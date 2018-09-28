@@ -1,6 +1,5 @@
 package com.banxue.projects.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
 
 import com.banxue.projects.entity.Project;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
@@ -13,7 +12,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author feng
  * @since 2018-09-25
  */
-@Mapper
 public interface ProjectMapper extends BaseMapper<Project> {
 
 }
