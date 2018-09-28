@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.banxue.shiro.ShiroUtils;
 import com.banxue.user.entity.User;
+import com.banxue.utils.R;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -25,13 +26,18 @@ import org.springframework.stereotype.Controller;
 public class UserController {
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-    public String login(String username, String password,String vcode,Boolean rememberMe){
+    public R login(String username, String password,String vcode,Boolean rememberMe){
         System.out.println(username);
         UsernamePasswordToken token = new UsernamePasswordToken(username, password,rememberMe);
         SecurityUtils.getSubject().login(token);
 
-        return "loginSuccess";
+        return R.ok();
     }
+	@RequestMapping(value="/login",method=RequestMethod.GET)
+	public String login(){
+		
+		return "login";
+	}
 
     @RequestMapping(value="/index",method=RequestMethod.GET)
     public String index(){
