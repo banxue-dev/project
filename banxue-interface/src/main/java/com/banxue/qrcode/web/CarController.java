@@ -1,11 +1,9 @@
 package com.banxue.qrcode.web;
 
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.banxue.qrcode.entity.Car;
 import com.banxue.qrcode.service.ICarService;
 import com.banxue.utils.R;
