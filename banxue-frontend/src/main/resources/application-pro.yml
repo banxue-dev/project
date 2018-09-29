@@ -1,0 +1,7 @@
+#mysql
+spring:
+   datasource:
+      url: jdbc:mysql://120.77.148.235:3306/banxue-dev?useUnicode=true&characterEncoding=utf8
+      username: feng
+      password: feng.123456
+      driver-class-name: com.mysql.jdbc.Driver
