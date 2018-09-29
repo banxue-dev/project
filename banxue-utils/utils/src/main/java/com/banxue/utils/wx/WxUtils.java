@@ -15,11 +15,11 @@ import com.banxue.utils.pay.wex.pojo.WxTokenDO;
 */
 public class WxUtils {
 	
-	public static final String appId="wx3d7f7c26f2369785";
-	public static final String appsecret = "c34fde54dfac1f9c2870ee8edf467ebf";// 应用秘钥
+	public static final String appId="wx24afd57c69514a36";
+	public static final String appsecret = "65279fdbde15b25e3129fcc70037b1a0";// 应用秘钥
 	public static final String token_out_time = "7200000";// token超时时间单位：MS
-	public static final String wxservicetoken="qinchuan";//微信服务器交互的凭证token
-	public static final String wxaeskey="MQaCz7zLq212FwHJjGXlJ5WApZQ4yhc5DdYp5D88sov";//参与消息加解密的aeskey
+	public static final String wxservicetoken="nuocar";//微信服务器交互的凭证token
+	public static final String wxaeskey="nBzjNWYZam1g8j6u7KgrwJaoQ9Ld4EbT7xsvXfoSK97";//参与消息加解密的aeskey
     // 各种消息类型,除了扫带二维码事件
     
 	/**
