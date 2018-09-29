@@ -9,7 +9,9 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.banxue.utils.HttpUtils;
+import com.banxue.utils.log.FileLog;
 import com.banxue.utils.wx.StrXmlToMap;
+import com.banxue.utils.wx.WxUtils;
 
 /**
 作者：fengchase
@@ -29,14 +31,14 @@ public class ServiceUtil {
 	 * 根据授权码code获取access_token，参考：http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html#.E7.AC.AC.E4.BA.8C.E6.AD.A5.EF.BC.9A.E9.80.9A.E8.BF.87code.E6.8D.A2.E5.8F.96.E7.BD.91.E9.A1.B5.E6.8E.88.E6.9D.83access_token
 	 */
 	public static JSONObject getOpenId(String code) {
-		String openParam = "appid=" + WxPayConfig.APP_ID + "&secret=" + WxPayConfig.APP_SECRET + "&code=" + code
+		String openParam = "appid=" + WxUtils.appId + "&secret=" + WxUtils.appsecret + "&code=" + code
 				+ "&grant_type=authorization_code";
 		String openJsonStr = HttpUtils.sendGET("https://api.weixin.qq.com/sns/oauth2/access_token", openParam);
-		System.out.println("openJsonStr:" + openJsonStr);
+		FileLog.debugLog("openJsonStr:" + openJsonStr);
 		
 		// 获取openid
 		JSONObject openJson = JSONObject.parseObject(openJsonStr);
-		String errcode=openJson.getString("errcode");
+//		String errcode=openJson.getString("errcode");
 		// String openid = openJson.getString("openid");
 		// String access_token = openJson.getString("access_token");
 		return openJson;

@@ -7,11 +7,6 @@ package com.banxue.utils.pay.wex;
 */
 public class WxPayConfig {
 
-    /**公众号AppId*/
-    public static final String APP_ID = "wx3d7f7c26f2369785";    
- 
-    /**公众号AppSecret*/
-    public static final String APP_SECRET = "c34fde54dfac1f9c2870ee8edf467ebf";
     /**加密方式*/
     public static final String SIGN_TYPE = "MD5";
  

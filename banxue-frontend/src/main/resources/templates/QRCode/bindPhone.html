@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>初始绑定电话号码</title>
+	<link rel="stylesheet" href="css/modBind.css">
+	
+</head>
+<body>
+<header style="background: #ec5224;width: 100%;height: 50px;text-align:center;line-height:50px;">
+    <img style=" width: 50px;height: 50px;float: left;z-index: 999999999;" onclick="window.history.go(-1)" src="img/rpw_back_n.png"/>
+    <span style="font-size: 14px;color: #fff;">绑定你的电话号码</span>
+</header>
+	<div class="pc-kk-form" id="subForm">
+		<form action="">
+			<div class="pc-kk-form-list">
+				<input type="text" id="telephone" placeholder="手机号码" valid="phone" tips="请正确填写电话号码!">
+			</div>
+			<div style="margin-top:10px;"></div>
+			<div class="pc-kk-form-list pc-kk-form-list-clear">
+				<div class="_childe" name="_childe" style="width:65%">
+					<input type="text" id="validCode" placeholder="验证码" valid="required" tips="验证码不能为空!"> 
+				</div>
+				<div class="_childe" id="_getCode" name="_getCode" style="width:33%;float:right;background-color:#4cd463;color:white;text-align:center;cursor:pointer;">
+					获取验证码
+				</div>
+			</div>
+			<div class="pc-kk-form-list">
+				<input type="text" id="userMessage" placeholder="留言" >
+			</div>
+			<div class="pc-kk-form-btn">
+				<button not='not'>提交</button>
+			</div>
+		</form>
+	</div>
+
+
+
+<script type="text/javascript" src="/utils/js/jquery.min.js"></script>
+	<script>
+	
+		var entity={
+			getCode:true,
+			codeTime:5,
+			codeStart:function(){
+				$('#_getCode').css('background-color','#cccccc');
+				$('#_getCode').text('('+(entity.codeTime--)+')S后再次获取');
+			},
+			codeEnd:function(){
+				$('#_getCode').css('background-color','#4cd463');
+					$('#_getCode').text('获取验证码');
+					entity.getCode=true;
+					entity.codeTime=60;
+			},
+			codePass:function(dom){
+				dom.parent('div').css('border','1px solid #4cd463');
+			},
+			codeNPass:function(dom){
+				entity.errTips(dom.attr('tips'));
+				dom.parent('div').css('border','1px solid red');
+				dom.focus();
+			},err_tips_state:true,
+			errTips:function(msg){
+				var istips=$('#_errTips').text();
+				if(istips){
+					$('#_errTips').text(msg);
+					
+				}else{var tipsHtml='<div id="_errTips" style="border-radius:5px;top:20px;position:fixed;width:80%;left:10%;height:40px;line-height:40px;text-align:center;background-color:red;">'+msg+'</div>';
+					$('body').append(tipsHtml);
+				}
+				if(entity.err_tips_state){
+					$('#_errTips').show();
+					entity.err_tips_state=false;
+					setTimeout(function(){
+						$('#_errTips').hide();	
+						entity.err_tips_state=true;
+					},2000);
+				}
+				
+			},
+			startloading:function(){
+				var isload=$('#_loading').text();
+				if(isload){
+					$('#_loading').show();
+				}else{
+					var loadHtml='<div id="_loading" onclick="entity.endloading()" style="border-radius:5px;top:20px;position:fixed;width:100%;height:100%;text-align:center;background-color:black;opacity:0.5;"><div style="margin-top:10%;color:white;">加载中..</div></div>';
+					$('body').append(loadHtml);
+				}
+			},endloading:function(){
+				$('#_loading').hide();
+			}
+		}
+	function _submit(){
+		var params=validateFrom();
+		
+		if(params.res){
+			console.log('pass');
+			var isInter=$('#isWb').is(':checked');//是否安装宽带
+			params.isWb=isInter;
+		}else{
+			console.log('nopass');
+		}
+		console.log(JSON.stringify(params));
+	}
+	function validateFrom(){
+		var inps=$('#subForm :input');
+		var params={};
+		var res=true;
+		var thDom;
+		for(var i=0;i<inps.size();i++){
+			var thDom=$(inps[i]);
+			var vthen=thDom.attr('valid');
+			var thenVal=thDom.val();
+			if(vthen=='required'){
+				if(thenVal==''){
+					res=false;
+					break;
+				}
+				entity.codePass(thDom);
+			}
+			if(vthen=='phone'){
+				var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+				if (!phoneReg.test(thenVal)) {
+					res=false;
+					break;
+				}
+				entity.codePass(thDom);
+			}
+			if(vthen=='ID'){
+				var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+				if(reg.test(thenVal) === false){
+					res=false;
+					break;
+				}
+				entity.codePass(thDom);
+			}
+			if(vthen=='not'){
+				if(thenVal==thDom.attr('v-value')){
+					res=false;
+					break;
+				}
+				entity.codePass(thDom);
+			}
+			if(thDom.attr('not')!='not'){
+				var thId=thDom.attr('id');
+				params[thId]=thenVal;
+			}
+		}
+		if(!res){
+			entity.codeNPass(thDom);
+		}
+		params['res']=res;
+		return params;
+	}
+	function getYeValue(s){
+		var ul='<li data-value="USA">janpennis</li><li data-value="Britain">Britain</li><li data-value="Britain">Germany</li>';
+		$('#_persents_ul').html(ul);
+	}
+	function getYSchoolValue(){
+		var ul='';
+		$('#_shcool').html();
+	}
+	$(function(){
+			chepInit();
+			$(":submit").click(function(){
+				_submit();
+				 return false;
+			})
+	})
+		
+
+
+		$('#_getCode').click(function(){
+			var thenVal=$('#telephone').val();
+			var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+				if (!phoneReg.test(thenVal)) {
+					entity.codeNPass($('#telephone'));
+					return;
+				}
+			
+			if(entity.getCode){
+				entity.getCode=false;
+				$('#_getCode').css('background-color','#cccccc');
+				$('#_getCode').text('('+(--entity.codeTime)+')S后再次获取');
+				var codeInv=setInterval(function(){
+					if(entity.codeTime<=1){
+						entity.codeEnd();;
+						window.clearInterval(codeInv);
+					}else{
+						$('#_getCode').text('('+(--entity.codeTime)+')S后再次获取');
+						
+					}
+				},1000);
+			}
+		})
+		
+
+	</script>
+
+</body>
+</html>
