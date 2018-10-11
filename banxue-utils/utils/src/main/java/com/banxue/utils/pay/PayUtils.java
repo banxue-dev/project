@@ -104,7 +104,7 @@ public class PayUtils {
 			// 执行统一下单接口 获得预支付id，一下是必填参数
 
 			// 微信分配的公众账号ID（企业号corpid即为此appId）
-			reqHandler.setParameter("appid", WxPayConfig.APP_ID);
+			reqHandler.setParameter("appid", WxUtils.appId);
 			// 微信支付分配的商户号
 			reqHandler.setParameter("mch_id", WxPayConfig.MCH_ID);
 			// 终端设备号(门店号或收银设备ID)，注意：PC网页或公众号内支付请传"WEB"
@@ -149,7 +149,7 @@ public class PayUtils {
 
 			// 生成支付签名,这个签名 给 微信支付的调用使用
 			SortedMap<Object, Object> signMap = new TreeMap<Object, Object>();
-			signMap.put("appId", WxPayConfig.APP_ID);
+			signMap.put("appId", WxUtils.appId);
 			signMap.put("timeStamp", timestamp);
 			signMap.put("nonceStr", noncestr);
 			signMap.put("package", "prepay_id=" + prepay_id);
@@ -162,7 +162,7 @@ public class PayUtils {
 			// 微信分配的公众账号ID（企业号corpid即为此appId）
 			JSONObject res = new JSONObject();
 
-			res.put("appId", WxPayConfig.APP_ID);
+			res.put("appId", WxUtils.appId);
 			// 时间戳
 			res.put("timeStamp", timestamp);
 			// 随机字符串
