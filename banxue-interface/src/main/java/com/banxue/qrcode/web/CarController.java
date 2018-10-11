@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.banxue.qrcode.entity.Car;
 import com.banxue.qrcode.service.ICarService;
 import com.banxue.utils.R;
+import com.banxue.utils.StringUtils;
 import com.banxue.utils.log.FileLog;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -35,6 +36,9 @@ public class CarController {
 	@ResponseBody
 	public R getUserCar(String userPhone) {
 		try{
+			if(StringUtils.StrFilter(userPhone)) {
+				return R.error("包含非法字符。");
+			}
 			Wrapper<Car> wra=new EntityWrapper<Car>();
 			wra.eq("user_phone", "13524954089");
 			List<Car> lst=carService.selectList(wra);
