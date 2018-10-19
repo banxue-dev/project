@@ -43,7 +43,7 @@ var next=0;
 	
 	function choosekey(obj,jj){	
 		if(jj==37){
-			//alert("车牌："+$(".car_input").attr("data-pai"));
+			// alert("车牌："+$(".car_input").attr("data-pai"));
 			layer.closeAll();
 		}else if(jj==29){
 			if($(".ppHas").length==0){
@@ -101,6 +101,7 @@ var next=0;
 	function getpai(){
 		var pai=trimStr($(".car_input").text());
 		$(".car_input").attr("data-pai",pai);
+		$('#carNo').val(pai);
 	}
 var chepInit = function() {
 

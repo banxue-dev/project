@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,8 @@ public class QRCodePageController {
 	private IUserService userService;
 	@Autowired
 	private ICardService cardService;
-
+	@Value("${spring.profiles.active}")
+	private static String active;
 	@GetMapping("/my")
 	public String toWodePage(HttpServletRequest request) {
 		try {
@@ -46,14 +48,23 @@ public class QRCodePageController {
 			if (StringUtils.isNullString(wxcode)) {
 				return "404";
 			}
-			JSONObject openJson = ServiceUtil.getOpenId(wxcode);
-			String openId = openJson.getString("openid");
-			String access_token = openJson.getString("access_token");
-			request.setAttribute("token", access_token);
-			request.setAttribute("openId", openId);
+			String openId ;
+			String access_token;
+			if(!StringUtils.twoStrMatch(active, "dev")) {
+				
+				JSONObject openJson = ServiceUtil.getOpenId(wxcode);
+				 openId = openJson.getString("openid");
+				 access_token = openJson.getString("access_token");
+				request.setAttribute("token", access_token);
+				request.setAttribute("openId", openId);
+			}else {
+				openId="001";
+				access_token="";
+			}
 			// 步骤1
 			Wrapper<User> wrapper = new EntityWrapper<User>();
 			wrapper.addFilter("wx_opend_id", openId);
+			request.setAttribute("openid", openId);
 			User user = userService.selectOne(wrapper);
 			if (user != null && user.getUserPhone() != null) {
 				// 步骤二
@@ -61,6 +72,12 @@ public class QRCodePageController {
 				request.setAttribute("headurl", user.getUserHeadUrl());
 				request.setAttribute("nickname", user.getNickName());
 				request.setAttribute("message", user.getUserMessage());
+				//获取二维码数据。
+				Wrapper<Card> cardw = new EntityWrapper<Card>();
+				
+				cardw.addFilter("user_phone", user.getUserPhone());
+				Card card=cardService.selectOne(cardw);
+				request.setAttribute("cardNo", card.getCardNo());
 				return "QRCode/wode";
 			} else {
 
@@ -90,6 +107,7 @@ public class QRCodePageController {
 		return "500";
 	}
 
+	
 	@GetMapping("/bind")
 	public String toBindPage() {
 		FileLog.debugLog("访问绑定页面");
@@ -119,13 +137,23 @@ public class QRCodePageController {
 	}
 
 	@GetMapping("/mod")
-	public String toModPage() {
+	public String toModPage(HttpServletRequest request,String openid) {
+		if(StringUtils.isNullString(openid)) {
+			return "404";
+		}else {
+			request.setAttribute("openid", openid);
+		}
 		FileLog.debugLog("访问修改个人信息页面");
 		return "QRCode/mod";
 	}
 
 	@GetMapping("/modbind")
-	public String toModBindPage() {
+	public String toModBindPage(HttpServletRequest request,String openid) {
+		if(StringUtils.isNullString(openid)) {
+			return "404";
+		}else {
+			request.setAttribute("openid", openid);
+		}
 		FileLog.debugLog("访问修改绑定信息页面");
 		return "QRCode/modbind";
 	}

@@ -5,3 +5,5 @@ spring:
       username: feng
       password: feng.123456
       driver-class-name: com.mysql.jdbc.Driver
+file:
+   path: c:/data/head

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.banxue.utils.StringUtils;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
@@ -105,7 +106,8 @@ public class User extends Model<User> {
         this.wxOpendId = wxOpendId;
     }
     public String getUserPhone() {
-        return userPhone;
+    	
+        return StringUtils.HiddenPhone(userPhone);
     }
 
     public void setUserPhone(String userPhone) {
@@ -140,9 +142,11 @@ public class User extends Model<User> {
         this.userCity = userCity;
     }
     public String getUserPwd() {
-        return userPwd;
+        return "";
     }
-
+    public String getRealPwd() {
+    	return userPwd;
+    }
     public void setUserPwd(String userPwd) {
         this.userPwd = userPwd;
     }
@@ -179,7 +183,6 @@ public class User extends Model<User> {
     protected Serializable pkVal() {
         return this.id;
     }
-
     @Override
     public String toString() {
         return "User{" +

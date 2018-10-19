@@ -1,9 +1,13 @@
+//<input type="text" id="telephone" placeholder="电话" valid="phone"tips="请正确填写电话号码!">
+//<button not='not'>提交</button>
+
+
 var entity = {
 	isGet : true,// 是否可以获取code了，如果还没有走出超时时间，就不允许获取
 	codeInit:function(timeout,codeid){
 		entity.codeTime=timeout;
 		entity.codeDom=codeid;
-	}
+	},
 	codeDom:'test',
 	codeTime : 60,
 	codeStart : function() {
@@ -12,7 +16,7 @@ var entity = {
 	},
 	codeCenter:function(){
 		$('#'+codeDom).text('(' + (--entity.codeTime) + ')S后再次获取');
-	}
+	},
 	codeEnd : function() {
 		$('#'+codeDom).css('background-color', '#4cd463');
 		$('#'+codeDom).text('获取验证码');
@@ -48,7 +52,7 @@ var entity = {
 				}
 			})
 		}
-	}
+	},
 	/**
 	 * 单元行验证通过
 	 */
@@ -69,13 +73,13 @@ var entity = {
 	 * @param msg
 	 * @returns
 	 */
-	errTips : function(msg) {
+	errTips : function(msg,_tipcolor) {
 		var istips = $('#_errTips').text();
 		if (istips) {
 			$('#_errTips').text(msg);
 
 		} else {
-			var tipsHtml = '<div id="_errTips" style="border-radius:5px;top:20px;position:fixed;width:80%;left:10%;height:40px;line-height:40px;text-align:center;background-color:#ec5224;">'
+			var tipsHtml = '<div id="_errTips" style="border-radius:5px;font-size:12px;top:20px;position:fixed;width:80%;left:10%;height:40px;line-height:40px;text-align:center;background-color:'+(_tipcolor||'#ec5224')+';">'
 					+ msg + '</div>';
 			$('body').append(tipsHtml);
 		}
@@ -94,7 +98,7 @@ var entity = {
 		if (isload) {
 			$('#_loading').show();
 		} else {
-			var loadHtml = '<div id="_loading" style="border-radius:5px;top:20px;position:fixed;width:100%;height:100%;text-align:center;background-color:black;opacity:0.5;"><div style="margin-top:10%;color:white;">加载中..</div></div>';
+			var loadHtml = '<div id="_loading" style="border-radius:5px;top:0px;font-size:12px;position:fixed;width:100%;height:100%;text-align:center;background-color:black;opacity:0.5;"><div style="margin-top:10%;color:white;">加载中..</div></div>';
 			$('body').append(loadHtml);
 		}
 	},
@@ -174,3 +178,28 @@ $(function() {
        entity.endloading();
     });
 })
+var _ajax=function(parm){
+	$.ajax({
+		url:parm.url,
+		data:parm.data || {},
+		type:parm.type || 'POST',
+		dataType:parm.dataType || 'json',
+		success:function(data){
+			if(data.code=="000000"){
+				if(parm.success){
+					parm.success(data.data);
+				}else{
+					entity.errTips(data.msg || '请求成功。','green');
+				}
+			}else{
+				entity.errTips(data.msg || '请求异常。');
+			}
+		},error:function(data){
+			if(parm.error){
+				parm.error();
+			}else{
+				entity.errTips('请求错误。');
+			}
+		}
+	})
+}

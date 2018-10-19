@@ -15,6 +15,7 @@
         <result column="car_desc" property="carDesc" />
         <result column="create_time" property="createTime" />
         <result column="mod_time" property="modTime" />
+        <result column="card_no" property="cardNo" />
     </resultMap>
 
 </mapper>

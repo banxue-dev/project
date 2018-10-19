@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.service.IService;
  * @since 2018-09-27
  */
 public interface IUserService extends IService<User> {
+	User getUserByOpenId(String openId);
 
 }

@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Configuration;
+
 import com.banxue.utils.log.FileLog;
 
 /**
@@ -21,6 +23,7 @@ import com.banxue.utils.log.FileLog;
 项目：banxue-interface
 */
 @WebFilter(filterName="myFilter",urlPatterns="/*")
+@Configuration
 public class AllFilter implements Filter {
 
 	@Override

@@ -10,6 +10,7 @@ spring:
       active: dev
 # server
 server:
-    port: 8084
+    port: 8085
 data:
    name: 21
+jsonpurl: http://127.0.0.1:8084

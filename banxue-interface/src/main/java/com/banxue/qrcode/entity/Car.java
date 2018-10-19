@@ -29,6 +29,11 @@ public class Car extends Model<Car> {
      */
     @TableField("car_no")
     private String carNo;
+    /**
+     * 二维码号
+     */
+    @TableField("card_no")
+    private String cardNo;
 
     /**
      * 手机号绑定
@@ -167,7 +172,15 @@ public class Car extends Model<Car> {
         return this.id;
     }
 
-    @Override
+    public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
+	}
+
+	@Override
     public String toString() {
         return "Car{" +
         "id=" + id +

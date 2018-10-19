@@ -1,0 +1,9 @@
+var baseUrl="http://127.0.0.1:8085/";
+var _getUserCar=baseUrl+"car/getUserCar";
+var _modCarBind=baseUrl+"car/modCarBind";
+var _modUser=baseUrl+"user/modUser";
+var _getUserInfo=baseUrl+"user/getUser";
+var _uploadHead=baseUrl+"user/uploadHead";
+var _getSMSCode=baseUrl+"user/getVCode";
+var _uploadHeadByBlob=baseUrl+"user/uploadHeadByBlob";
+var _getHead=baseUrl+"user/uploadHead?headName=";
