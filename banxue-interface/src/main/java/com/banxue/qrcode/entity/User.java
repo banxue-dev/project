@@ -107,7 +107,8 @@ public class User extends Model<User> {
     }
     public String getUserPhone() {
     	
-        return StringUtils.HiddenPhone(userPhone);
+        return userPhone;
+//        return StringUtils.HiddenPhone(userPhone);
     }
 
     public void setUserPhone(String userPhone) {

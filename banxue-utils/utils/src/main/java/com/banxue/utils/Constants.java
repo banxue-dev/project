@@ -12,6 +12,6 @@ public class Constants {
 	public static String CODETIMEKEY="me_s_time";//短信验证码超时时间的字段名
 	public static long VCODTIMEOUT=60;//短信验证码超时时间
 	public static int VCODELENGTH=6;//短信验证码长度
-
+	public static String HeadUrlHead="http://127.0.0.1:8085/user/getHead?headName=";//头像地址头
 }
 

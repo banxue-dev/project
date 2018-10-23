@@ -7,6 +7,11 @@ package com.banxue.utils.wx;
 */
 public class WxConstants {
 
+	
+	/**
+	 * 用于和微信对接使用的token
+	 */
+	public static String WxToken="";
 	/**
      * 文本消息
      */

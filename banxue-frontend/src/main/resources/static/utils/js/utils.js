@@ -10,30 +10,33 @@ var entity = {
 	},
 	codeDom:'test',
 	codeTime : 60,
+	codeText:{bef:'S后再次获取',aft:'获取验证码'},
 	codeStart : function() {
-		$('#'+codeDom).css('background-color', '#cccccc');
-		$('#'+codeDom).text('(' + (entity.codeTime--) + ')S后再次获取');
+		$('#'+entity.codeDom).css('background-color', '#cccccc');
+		$('#'+entity.codeDom).text('(' + (entity.codeTime--) + ')'+(entity.codeText.bef || 'S后再次获取'));
 	},
 	codeCenter:function(){
-		$('#'+codeDom).text('(' + (--entity.codeTime) + ')S后再次获取');
+		$('#'+entity.codeDom).text('(' + (--entity.codeTime) + ')'+(entity.codeText.bef || 'S后再次获取'));
 	},
 	codeEnd : function() {
-		$('#'+codeDom).css('background-color', '#4cd463');
-		$('#'+codeDom).text('获取验证码');
+		$('#'+entity.codeDom).css('background-color', '#4cd463');
+		$('#'+entity.codeDom).text(entity.codeText.aft || '获取验证码');
 		entity.isGet = true;
 		entity.codeTime = 60;
 	},
 	getCode:function(url,data,callback){
-		if(isGet){
-			isGet=false;
-			$.ajax({
+		if(entity.isGet){
+			entity.isGet=false;
+			_ajax({
 				url:url,
 				data:data,
+				type:'POST',
+				asu:true,
 				success:function(res){
 					if(callback){
 						callback(res);
 					}else{
-						if(data.code=="000000"){
+						if(res.code=="000000"){
 							//成功
 							entity.codeStart();
 							var codeInv = setInterval(function() {
@@ -47,6 +50,8 @@ var entity = {
 						}else{
 							//失败
 							entity.errTips(res.msg);
+							entity.isGet = true;
+							entity.codeTime = 60;
 						}
 					}
 				}
@@ -57,16 +62,21 @@ var entity = {
 	 * 单元行验证通过
 	 */
 	codePass : function(dom) {
-		dom.parent('div').css('border', '1px solid #4cd463');
+		if(entity.codeBorder){
+			dom.parent('div').css('border', '1px solid #4cd463');
+		}
 	},
 	/**
 	 * 单元行验证不通过
 	 */
 	codeNPass : function(dom) {
 		entity.errTips(dom.attr('tips'));
-		dom.parent('div').css('border', '1px solid red');
+		if(entity.codeBorder){
+			dom.parent('div').css('border', '1px solid red');
+		}
 		dom.focus();
 	},
+	codeBorder:true,
 	err_tips_state : true,
 	/**
 	 * 错误提示
@@ -183,8 +193,17 @@ var _ajax=function(parm){
 		url:parm.url,
 		data:parm.data || {},
 		type:parm.type || 'POST',
+		xhrFields: {
+	           withCredentials: true
+	    },
+	    crossDomain: true,
 		dataType:parm.dataType || 'json',
 		success:function(data){
+			if(parm.asu){
+				//这个参数表示要直接使用suc方法
+				parm.success(data);
+				return;
+			}
 			if(data.code=="000000"){
 				if(parm.success){
 					parm.success(data.data);

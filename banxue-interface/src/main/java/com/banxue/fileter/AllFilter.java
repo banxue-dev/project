@@ -38,12 +38,14 @@ public class AllFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		// TODO 此处为方法主题
-		 HttpServletRequest request = (HttpServletRequest) servletRequest;
 	     HttpServletResponse response = (HttpServletResponse) servletResponse;
-	     FileLog.debugLog(jsonpurl);
 	     response.setHeader("Access-Control-Allow-origin", "http://127.0.0.1:8084");
-	     FileLog.debugLog("经过了Interface过滤器");
-	     filterChain.doFilter(request, response);
+	     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+	     response.setHeader("Access-Control-Max-Age", "0");
+	     response.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");
+	     response.setHeader("Access-Control-Allow-Credentials", "true");
+	     response.setHeader("XDomainRequestAllowed","1");
+	     filterChain.doFilter(servletRequest, response);
 
 	}
 

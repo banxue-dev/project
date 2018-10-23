@@ -45,6 +45,7 @@ var next=0;
 		if(jj==37){
 			// alert("车牌："+$(".car_input").attr("data-pai"));
 			layer.closeAll();
+			getChePaiNo();
 		}else if(jj==29){
 			if($(".ppHas").length==0){
 				$(".hasPro").find("span").text("");			
@@ -58,19 +59,13 @@ var next=0;
 			if(next<1){
 				next=0;
 			}
-			console.log(next);
 		}else{
 			if(next>5){
 				return
 			}
-			console.log(next);
 			for(var i = 0; i<$(".input_pp").length;i++){
 				if(next==0 & jj<10 & $(".input_pp:eq("+next+")").hasClass("input_zim")){
-					layer.open({
-						content: '车牌第二位为字母',
-						skin: 'msg',
-						time: 1
-					});
+					entity.errTips("车牌第二位为字母。")
 					return
 				}
 				$(".input_pp:eq("+next+")").find("span").text($(obj).text());
@@ -79,7 +74,6 @@ var next=0;
 				if(next>5){
 					next=6;
 				}
-				getpai();
 				return
 			}
 			
@@ -98,10 +92,10 @@ var next=0;
 	   next=0;
 	}	
 	function trimStr(str){return str.replace(/(^\s*)|(\s*$)/g,"");}
-	function getpai(){
-		var pai=trimStr($(".car_input").text());
-		$(".car_input").attr("data-pai",pai);
-		$('#carNo').val(pai);
+
+	function getChePaiNo(){
+		var pai=trimStr($("#view_pai").text());
+		$('#carNo').val(pai.replace(/\s/g,""));
 	}
 var chepInit = function() {
 

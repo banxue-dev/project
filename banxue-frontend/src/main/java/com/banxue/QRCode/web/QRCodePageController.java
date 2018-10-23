@@ -3,21 +3,28 @@ package com.banxue.QRCode.web;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.domain.Car;
 import com.banxue.QRCode.entity.Card;
 import com.banxue.QRCode.entity.User;
 import com.banxue.QRCode.service.ICardService;
 import com.banxue.QRCode.service.IUserService;
+import com.banxue.utils.Constants;
+import com.banxue.utils.R;
 import com.banxue.utils.StringUtils;
 import com.banxue.utils.log.FileLog;
 import com.banxue.utils.pay.wex.ServiceUtil;
+import com.banxue.utils.wx.WxConstants;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 
@@ -34,13 +41,13 @@ public class QRCodePageController {
 	private ICardService cardService;
 	@Value("${spring.profiles.active}")
 	private static String active;
+
 	@GetMapping("/my")
 	public String toWodePage(HttpServletRequest request) {
 		try {
 			/**
 			 * 逻辑 1.获取到code后获取用户的openid，然后去后台查询此openid是否绑定了手机号。
-			 * 2.如果没有绑定或者后台没有保存过这条openId，直接跳转到绑定页面 。
-			 * 3.如果后台没有保存过这条，则将此条用户入库。
+			 * 2.如果没有绑定或者后台没有保存过这条openId，直接跳转到绑定页面 。 3.如果后台没有保存过这条，则将此条用户入库。
 			 * 4.将此openid传入前台用于绑定。
 			 */
 			// 获取用户id
@@ -48,18 +55,18 @@ public class QRCodePageController {
 			if (StringUtils.isNullString(wxcode)) {
 				return "404";
 			}
-			String openId ;
+			String openId;
 			String access_token;
-			if(!StringUtils.twoStrMatch(active, "dev")) {
-				
+			if (!StringUtils.twoStrMatch(active, "dev")) {
+
 				JSONObject openJson = ServiceUtil.getOpenId(wxcode);
-				 openId = openJson.getString("openid");
-				 access_token = openJson.getString("access_token");
+				openId = openJson.getString("openid");
+				access_token = openJson.getString("access_token");
 				request.setAttribute("token", access_token);
 				request.setAttribute("openId", openId);
-			}else {
-				openId="001";
-				access_token="";
+			} else {
+				openId = "001";
+				access_token = "";
 			}
 			// 步骤1
 			Wrapper<User> wrapper = new EntityWrapper<User>();
@@ -69,14 +76,14 @@ public class QRCodePageController {
 			if (user != null && user.getUserPhone() != null) {
 				// 步骤二
 				// 有这个用户，直接前往我的界面
-				request.setAttribute("headurl", user.getUserHeadUrl());
+				request.setAttribute("headurl", Constants.HeadUrlHead+(user.getUserHeadUrl()==null?"zuofei.jpg":user.getUserHeadUrl()));
 				request.setAttribute("nickname", user.getNickName());
 				request.setAttribute("message", user.getUserMessage());
-				//获取二维码数据。
+				// 获取二维码数据。
 				Wrapper<Card> cardw = new EntityWrapper<Card>();
-				
+
 				cardw.addFilter("user_phone", user.getUserPhone());
-				Card card=cardService.selectOne(cardw);
+				Card card = cardService.selectOne(cardw);
 				request.setAttribute("cardNo", card.getCardNo());
 				return "QRCode/wode";
 			} else {
@@ -107,40 +114,68 @@ public class QRCodePageController {
 		return "500";
 	}
 
-	
 	@GetMapping("/bind")
-	public String toBindPage() {
+	public String toBindPage(HttpServletRequest request) {
+		/**
+		 * 1.获取到二维码卡号 2.判断此卡号是否绑定过，没有则跳转到绑定页面。
+		 * 
+		 */
+		String cardNo = request.getParameter("cardNo");
+		if (StringUtils.isNullString(cardNo)) {
+			return "404";
+		}
+		request.setAttribute("cardNo", cardNo);
 		FileLog.debugLog("访问绑定页面");
 		return "QRCode/bind";
 	}
 
 	@GetMapping("/index")
-	public String toIndexPage(HttpServletRequest request) {
+	public String toIndexPage(HttpServletRequest request, String cardNo) {
 		try {
 			/**
-			 * 1.获取到二维码卡号
-			 * 2.判断此卡号是否绑定过，没有则跳转到绑定页面。
+			 * 1.获取到二维码卡号 2.判断此卡号是否绑定过，没有则跳转到绑定页面。
 			 * 
 			 */
-			String cardNo=request.getParameter("carNo");
-			Wrapper<Card> wra=new EntityWrapper<Card>();
-			Card card=cardService.selectOne(wra);
-			if(card==null) {
-				//到绑定页面
-				request.setAttribute("cardNo", cardNo);
+			if (StringUtils.isNullString(cardNo)) {
+				return "404";
+			}
+			request.setAttribute("cardNo", cardNo);
+			Wrapper<Card> wra = new EntityWrapper<Card>();
+			wra.addFilter("card_no", cardNo);
+			Card card = cardService.selectOne(wra);
+			if (card == null) {
+				return "404";
+			}
+			if (StringUtils.isNullString(card.getUserPhone())) {
+				// 到绑定页面
 				return "QRCode/bind";
 			}
-		}catch(Exception e) {
+			/**
+			 * 逻辑分析： 1.如果此卡片已经绑定了，则直接返回该卡片对应的用户信息
+			 */
+			Wrapper<User> wru = new EntityWrapper<User>();
+			wru.addFilter("user_phone", card.getUserPhone());
+			User u = userService.selectOne(wru);
+			if (u == null) {
+				// 到绑定页面
+				return "QRCode/bind";
+			}
+			request.setAttribute("headurl", Constants.HeadUrlHead+(u.getUserHeadUrl()==null?"zuofei.jpg":u.getUserHeadUrl()));
+			request.setAttribute("message", u.getUserMessage());
+			request.setAttribute("nickname", u.getNickName());
+
+			return "QRCode/index";
+		} catch (Exception e) {
 			FileLog.errorLog(e);
 		}
-		return "QRCode/index";
+		return "error";
 	}
 
 	@GetMapping("/mod")
-	public String toModPage(HttpServletRequest request,String openid) {
-		if(StringUtils.isNullString(openid)) {
+	public String toModPage(HttpServletRequest request, String openid) {
+		if (StringUtils.isNullString(openid)) {
 			return "404";
-		}else {
+		} else {
 			request.setAttribute("openid", openid);
 		}
 		FileLog.debugLog("访问修改个人信息页面");
@@ -148,14 +183,16 @@ public class QRCodePageController {
 	}
 
 	@GetMapping("/modbind")
-	public String toModBindPage(HttpServletRequest request,String openid) {
-		if(StringUtils.isNullString(openid)) {
+	public String toModBindPage(HttpServletRequest request, String openid) {
+		if (StringUtils.isNullString(openid)) {
 			return "404";
-		}else {
+		} else {
 			request.setAttribute("openid", openid);
 		}
 		FileLog.debugLog("访问修改绑定信息页面");
 		return "QRCode/modbind";
 	}
+
+	
 
 }

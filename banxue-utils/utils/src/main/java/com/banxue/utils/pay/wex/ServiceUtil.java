@@ -45,7 +45,7 @@ public class ServiceUtil {
 	}
 
 	/**
-	 * 获取微信u用户信息
+	 * 获取微信用户信息
 	 * @param acc_token
 	 * @param openid
 	 * @param code 
