@@ -27,10 +27,7 @@ public class StartExec implements CommandLineRunner{
 		// TODO 此处为方法主题
 		 FileLog.debugLog("开机启动任务。");
 	        if(StringUtils.twoStrMatch("pro", ispro)) {
-		        JSONObject obj=WxUtils.geWxtAccessToken();
-		        String token=obj.getString("access_token");
-		        WxConstants.WxToken=token;
-		        FileLog.debugLog("token："+WxConstants.WxToken);
+	        	TimerTask.updateWxToken();
 	        }
 	}
 

@@ -1,20 +1,21 @@
 package com.banxue.utils.ppc.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.huawei.hosting.service.voice.demo.IAXInterfaceDemo;
-import com.huawei.hosting.utils.HttpUtil;
+import com.banxue.utils.R;
+import com.banxue.utils.ResultEntity;
+import com.banxue.utils.log.FileLog;
+import com.banxue.utils.ppc.HttpUtil;
+import com.banxue.utils.ppc.service.IAXInterfaceDemo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 /**
  * AX模式接口测试
  */
 public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
-    private Logger logger = Logger.getLogger(AXInterfaceDemoImpl.class);
 
     private String appKey; // APP_Key
     private String appSecret; // APP_Secret
@@ -44,10 +45,10 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
      * @param calleeNumDisplay 是否显示用户号码
      */
     @Override
-    public void axBindNumber(String origNum, String privateNum, String calleeNumDisplay) {
+    public ResultEntity axBindNumber(String origNum, String privateNum, String calleeNumDisplay) {
         if (StringUtils.isBlank(origNum) || StringUtils.isBlank(privateNum) || StringUtils.isBlank(calleeNumDisplay)) {
-            logger.info("axBindNumber set params error");
-            return;
+            FileLog.debugLog("axBindNumber set params error");
+            return ResultEntity.errordesc("参数错误");
         }
         // 必填,AX模式绑定接口访问URI
         String url = "/rest/provision/caas/privatenumber/v1.0";
@@ -77,7 +78,13 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
         // json.put("preVoice", preVoiceArr); //个性化通话前等待音
 
         String result = HttpUtil.sendPost(appKey, appSecret, realUrl, json.toString());
-        logger.info("Response is :" + result);
+        JSONObject res=JSONObject.parseObject(result);
+        FileLog.debugLog("Response is :" + result);
+        if(res.getInteger("resultcode")!=0) {
+        	//subscriptionId
+        	return ResultEntity.errordesc(res.getString("resultdesc"));
+        }
+        return ResultEntity.successdesc("成功",res.getString("subscriptionId"));
     }
 
     /**
@@ -92,7 +99,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
     @Override
     public void axModifyNumber(String subscriptionId, String origNum, String privateNum, boolean privateSms) {
         if (StringUtils.isBlank(subscriptionId) && (StringUtils.isBlank(origNum) || StringUtils.isBlank(privateNum))) {
-            logger.info("axModifyNumber set params error");
+            FileLog.debugLog("axModifyNumber set params error");
             return;
         }
 
@@ -115,7 +122,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
         json.put("privateSms", privateSms); // 是否支持短信功能
 
         String result = HttpUtil.sendPut(appKey, appSecret, realUrl, json.toString());
-        logger.info("Response is :" + result);
+        FileLog.debugLog("Response is :" + result);
     }
 
     /**
@@ -127,10 +134,10 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
      *                       subscriptionId和(origNum,privateNum)二选一即可,当都传入时,优先选用subscriptionId
      */
     @Override
-    public void axUnbindNumber(String subscriptionId, String origNum, String privateNum) {
+    public ResultEntity axUnbindNumber(String subscriptionId, String origNum, String privateNum) {
         if (StringUtils.isBlank(subscriptionId) && (StringUtils.isBlank(origNum) || StringUtils.isBlank(privateNum))) {
-            logger.info("axUnbindNumber set params error");
-            return;
+            FileLog.debugLog("axUnbindNumber set params error");
+            return ResultEntity.errordesc("失败");
         }
 
         // 必填,AX模式解绑接口访问URI
@@ -150,7 +157,13 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
         }
 
         String result = HttpUtil.sendDelete(appKey, appSecret, realUrl, HttpUtil.map2UrlEncodeString(map));
-        logger.info("Response is :" + result);
+        JSONObject res=JSONObject.parseObject(result);
+        FileLog.debugLog("Response is :" + result);
+        if(res.getInteger("resultcode")!=0) {
+        	//subscriptionId
+        	return ResultEntity.errordesc(res.getString("resultdesc"));
+        }
+        return ResultEntity.successdesc("成功");
     }
 
     /**
@@ -163,7 +176,6 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
     @Override
     public void axQueryBindRelation(String subscriptionId, String origNum) {
         if (StringUtils.isBlank(subscriptionId) && StringUtils.isBlank(origNum)) {
-            logger.error("axQueryBindRelation set parsms error");
             return;
         }
 
@@ -181,7 +193,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
         }
 
         String result = HttpUtil.sendGet(appKey, appSecret, realUrl, HttpUtil.map2UrlEncodeString(map));
-        logger.info("Response is :" + result);
+        FileLog.debugLog("Response is :" + result);
     }
 
     /**
@@ -197,7 +209,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
     public void axSetCalleeNumber(String subscriptionId, String origNum, String privateNum, String calleeNum) {
         if (StringUtils.isBlank(calleeNum) || (StringUtils.isBlank(subscriptionId)
                 && (StringUtils.isBlank(origNum) || StringUtils.isBlank(privateNum)))) {
-            logger.info("axSetCalleeNumber set params error");
+            FileLog.debugLog("axSetCalleeNumber set params error");
             return;
         }
 
@@ -220,7 +232,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
         json.put("calleeNum", calleeNum); // 本次呼叫的真实被叫号码
 
         String result = HttpUtil.sendPut(appKey, appSecret, realUrl, json.toString());
-        logger.info("Response is :" + result);
+        FileLog.debugLog("Response is :" + result);
     }
 
     /**
@@ -232,7 +244,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
     @Override
     public void axGetRecordDownloadLink(String recordDomain, String fileName) {
         if (StringUtils.isBlank(recordDomain) || StringUtils.isBlank(fileName)) {
-            logger.info("axGetRecordDownloadLink set params error");
+            FileLog.debugLog("axGetRecordDownloadLink set params error");
             return;
         }
 
@@ -246,7 +258,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
         map.put("fileName", fileName); // 录音文件名
 
         String result = HttpUtil.sendGet(appKey, appSecret, realUrl, HttpUtil.map2UrlEncodeString(map));
-        logger.info("Response is :" + result);
+        FileLog.debugLog("Response is :" + result);
     }
 
     /**
@@ -257,7 +269,7 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
     @Override
     public void axStopCall(String sessionid) {
         if (StringUtils.isBlank(sessionid)) {
-            logger.info("axStopCall set params error");
+            FileLog.debugLog("axStopCall set params error");
             return;
         }
 
@@ -271,6 +283,6 @@ public class AXInterfaceDemoImpl implements IAXInterfaceDemo {
         json.put("signal", "call_stop"); // 取值固定为"call_stop"
 
         String result = HttpUtil.sendPost(appKey, appSecret, realUrl, json.toString());
-        logger.info("Response is :" + result);
+        FileLog.debugLog("Response is :" + result);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONObject;
+import com.banxue.privatenum.entity.PrivateNum;
+import com.banxue.privatenum.service.IPrivateNumService;
 import com.banxue.qrcode.entity.Car;
 import com.banxue.qrcode.entity.Card;
 import com.banxue.qrcode.entity.User;
@@ -17,9 +19,13 @@ import com.banxue.utils.Constants;
 import com.banxue.utils.DateUtils;
 import com.banxue.utils.HttpUtils;
 import com.banxue.utils.R;
+import com.banxue.utils.ResultEntity;
 import com.banxue.utils.StringUtils;
 import com.banxue.utils.file.FileUtil;
 import com.banxue.utils.log.FileLog;
+import com.banxue.utils.ppc.HWConfig;
+import com.banxue.utils.ppc.service.IAXInterfaceDemo;
+import com.banxue.utils.ppc.service.impl.AXInterfaceDemoImpl;
 import com.banxue.utils.sms.SendShortMessage;
 import com.banxue.utils.wx.WxConstants;
 import com.banxue.utils.wx.WxUtils;
@@ -33,6 +39,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +66,8 @@ public class UserController {
 	private IUserService userService;
 	@Autowired
 	private ICardService cardService;
-
+	@Autowired
+	private IPrivateNumService iPrivateNumService;
 	@Autowired
 	private ICarService carService;
 	@Value("${file.path}")
@@ -341,7 +349,6 @@ public class UserController {
 	@ResponseBody
 	public R callUserPhone(String cardNo, String carNo) {
 		try {
-	
 			if (StringUtils.RequestParmsV(cardNo, carNo)) {
 				return R.error("错误的车牌号");
 			}
@@ -351,10 +358,27 @@ public class UserController {
 			if (car == null || StringUtils.isNullString(car.getUserPhone())) {
 				return R.error("错误的车牌号");
 			}
-			return R.okdata("13524954089");
+			/**
+			 * 获取空闲的号码。
+			 */
+			List<PrivateNum> lst=iPrivateNumService.getListByState(0);
+			if(lst!=null && lst.size()>0) {
+				//有号码
+				PrivateNum pn=lst.get(0);
+		        IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
+		        ResultEntity t=ax.axBindNumber(car.getUserPhone(), pn.getPrivateNumber(), "0");
+		        if(t.isState()) {
+		        	//绑定成功,修改这个号码的状态
+		        	pn.setState(1);//使用中
+		        	pn.setBindGxId(t.getData().toString());
+		        	iPrivateNumService.updateById(pn);
+		        }
+				return R.okdata(pn.getPrivateNumber());
+			}
 		} catch (Exception e) {
-
+			FileLog.errorLog(e);
+			R.error("异常");
 		}
-		return R.error();
+		return R.error("暂无可用号码，请稍等几秒再次尝试。");
 	}
 }
