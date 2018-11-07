@@ -1,26 +1,25 @@
 /**
- * jQuery photoClip v1.5.1
- * 依赖插件
- * - iscroll-zoom.js
- * - hammer.js
- *
+ * jQuery photoClip v1.5.1 依赖插件 - iscroll-zoom.js - hammer.js
+ * 
  * @author 白俊杰 625603381@qq.com 2014/07/31
- * https://github.com/baijunjie/jQuery-photoClip
- *
- * @brief	支持手势的裁图插件
- *			在移动设备上双指捏合为缩放，双指旋转可根据旋转方向每次旋转90度
- *			在PC设备上鼠标滚轮为缩放，每次双击则顺时针旋转90度
+ *         https://github.com/baijunjie/jQuery-photoClip
+ * 
+ * @brief 支持手势的裁图插件 在移动设备上双指捏合为缩放，双指旋转可根据旋转方向每次旋转90度 在PC设备上鼠标滚轮为缩放，每次双击则顺时针旋转90度
  * @option_param {number} width 截取区域的宽度
  * @option_param {number} height 截取区域的高度
  * @option_param {string} file 上传图片的<input type="file">控件的选择器或者DOM对象
  * @option_param {string} view 显示截取后图像的容器的选择器或者DOM对象
  * @option_param {string} ok 确认截图按钮的选择器或者DOM对象
  * @option_param {string} outputType 指定输出图片的类型，可选 "jpg" 和 "png" 两种种类型，默认为 "jpg"
- * @option_param {boolean} strictSize 是否严格按照截取区域宽高裁剪。默认为false，表示截取区域宽高仅用于约束宽高比例。如果设置为true，则表示截取出的图像宽高严格按照截取区域宽高输出
- * @option_param {function} loadStart 开始加载的回调函数。this指向 fileReader 对象，并将正在加载的 file 对象作为参数传入
+ * @option_param {boolean} strictSize
+ *               是否严格按照截取区域宽高裁剪。默认为false，表示截取区域宽高仅用于约束宽高比例。如果设置为true，则表示截取出的图像宽高严格按照截取区域宽高输出
+ * @option_param {function} loadStart 开始加载的回调函数。this指向 fileReader 对象，并将正在加载的
+ *               file 对象作为参数传入
  * @option_param {function} loadComplete 加载完成的回调函数。this指向图片对象，并将图片地址作为参数传入
- * @option_param {function} loadError 加载失败的回调函数。this指向 fileReader 对象，并将错误事件的 event 对象作为参数传入
- * @option_param {function} clipFinish 裁剪完成的回调函数。this指向图片对象，会将裁剪出的图像数据DataURL作为参数传入
+ * @option_param {function} loadError 加载失败的回调函数。this指向 fileReader 对象，并将错误事件的
+ *               event 对象作为参数传入
+ * @option_param {function} clipFinish
+ *               裁剪完成的回调函数。this指向图片对象，会将裁剪出的图像数据DataURL作为参数传入
  */
 var imgsource ='';
 function setImagePreview() {
@@ -67,7 +66,7 @@ function setImagePreview() {
 function qd() {
 	var objUrl = getObjectURL(this.files[0]);
 	obUrl = objUrl;
-//	console.log("objUrl = " + objUrl);
+// console.log("objUrl = " + objUrl);
 	if (objUrl) {
 		$("#img0").attr("src", objUrl).show();
 	} else {
@@ -88,7 +87,7 @@ function getObjectURL(file) {
 $("#file0").change(function() {
 	var objUrl = getObjectURL(this.files[0]);
 	obUrl = objUrl;
-//	console.log("objUrl = " + objUrl);
+// console.log("objUrl = " + objUrl);
 	if (objUrl) {
 		$("#img0").attr("src", objUrl).show();
 	} else {
@@ -101,11 +100,12 @@ $(function() {
 		$(".htmleaf-container").show();
 	})
 	$("#clipBtn").click(function() {
-						$("#logox").empty();
-						$('#logox')
-								.append(
-										'<img src="' + imgsource + '" align="absmiddle" style=" width: 5rem;height: 4.16rem; margin-left: 1.5rem;margin-top: 1.92rem">');
-						$(".htmleaf-container").hide();
+			$("#logox").empty();
+			$('#logox')
+					.append(
+							'<img src="' + imgsource + '" align="absmiddle" style=" width: 5rem;height: 4.16rem; margin-left: 1.5rem;margin-top: 1.92rem">');
+			$(".htmleaf-container").hide();
+			headChange=true;
 	})
 	$(".mask").click(function() {
 				$(".mask").hide();
@@ -200,8 +200,8 @@ $(function() {
 		if (!$file.length) return;
 
 		var $img,
-			imgWidth, imgHeight, //图片当前的宽高
-			imgLoaded; //图片是否已经加载完成
+			imgWidth, imgHeight, // 图片当前的宽高
+			imgLoaded; // 图片是否已经加载完成
 
 		$file.attr("accept", "image/*");
 		$file.change(function() {
@@ -212,7 +212,7 @@ $(function() {
 			} else {
 				var fileReader = new FileReader();
 				fileReader.onprogress = function(e) {
-//					console.log((e.loaded / e.total * 100).toFixed() + "%");
+// console.log((e.loaded / e.total * 100).toFixed() + "%");
 				};
 				fileReader.onload = function(e) {
 					var kbs = e.total / 1024;
@@ -221,7 +221,8 @@ $(function() {
 						var quality = 1024 / kbs;
 						var $tempImg = $("<img>").hide();
 						$tempImg.load(function() {
-							// IOS 设备中，如果的照片是竖屏拍摄的，虽然实际在网页中显示出的方向也是垂直，但图片数据依然是以横屏方向展示
+							// IOS
+							// 设备中，如果的照片是竖屏拍摄的，虽然实际在网页中显示出的方向也是垂直，但图片数据依然是以横屏方向展示
 							var sourceWidth = this.naturalWidth; // 在没有加入文档前，jQuery无法获得正确宽高，但可以通过原生属性来读取
 							$tempImg.appendTo(document.body);
 							var realityHeight = this.naturalHeight;
@@ -343,7 +344,8 @@ $(function() {
 			});
 			// 在移动设备上，尤其是Android设备，当为一个元素重置了宽高时
 			// 该元素的offsetWidth/offsetHeight、clientWidth/clientHeight等属性并不会立即更新，导致相关的js程序出现错误
-			// iscroll 在刷新方法中正是使用了 offsetWidth/offsetHeight 来获取scroller元素($moveLayer)的宽高
+			// iscroll 在刷新方法中正是使用了 offsetWidth/offsetHeight
+			// 来获取scroller元素($moveLayer)的宽高
 			// 因此需要手动将元素重新添加进文档，迫使浏览器强制更新元素的宽高
 			$clipView.append($moveLayer);
 			myScroll.refresh();

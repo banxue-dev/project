@@ -23,7 +23,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 	public User getUserByOpenId(String openId) {
 		// TODO 此处为方法主题
 		Wrapper<User> uw = new EntityWrapper<User>();
-		uw.addFilter("wx_opend_id", openId);
+		uw.where("wx_opend_id={0}", openId);
 		return this.selectOne(uw);
 	}
 

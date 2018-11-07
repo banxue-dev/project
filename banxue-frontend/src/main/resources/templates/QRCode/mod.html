@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>修改个人信息</title>
-<link href="css/mod.css" rel="stylesheet" type="text/css">
+<link href="/QRCode/css/mod.css" rel="stylesheet" type="text/css">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
@@ -74,6 +74,8 @@
 	<script src="/QRCode/js/hammer.js"></script>
 	<script src="/QRCode/js/jquery.photoClip.js"></script>
 	<script>
+		entity.codeBorder=false;
+		var headChange=false;
 		var one_obj = {
 			/**
 			 * @param base64Codes
@@ -168,21 +170,28 @@
 			}
 		};
 		one_obj.init();
+		function subInfo(params){
+			_ajax({
+				url : _modUser,
+				data : params,
+				success : function(data) {
+					window.history.go(-1);
+				}
+			})
+		}
 		function success_sub() {
 			var _vai = validateFrom('_form');
 			if (_vai.res) {
 				//验证通过
-				//先进行图片上传；
-				one_obj.funUploadFile(one_obj.imgDataUrl,function(data) {
-					_vai['headName'] = data;//给头像对象赋值
-					_ajax({
-						url : _modUser,
-						data : _vai,
-						success : function(data) {
-							window.history.go(-1);
-						}
+				if(headChange){
+					//修改了图片
+					//先进行图片上传；
+					one_obj.funUploadFile(one_obj.imgDataUrl,function(data) {
+						_vai['headName'] = data;//给头像对象赋值
+						subInfo(_vai);
 					})
-				})
+				}
+				subInfo(_vai);
 			}
 		}
 	</script>

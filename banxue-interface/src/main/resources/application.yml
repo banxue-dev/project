@@ -13,4 +13,4 @@ server:
     port: 8085
 data:
    name: 21
-jsonpurl: http://127.0.0.1:8084
+callBaseUrl: https://apppro.cloopen.com:8883/2013-12-26

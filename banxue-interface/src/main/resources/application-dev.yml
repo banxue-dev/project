@@ -7,3 +7,5 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
 file:
    path: c:/data/head
+
+jsonpurl: http://10.9.38.148:8084

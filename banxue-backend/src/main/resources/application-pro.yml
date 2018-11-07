@@ -5,3 +5,8 @@ spring:
       username: feng
       password: feng.123456
       driver-class-name: com.mysql.jdbc.Driver
+# server
+server:
+    port: 80
+data:
+   name: 21

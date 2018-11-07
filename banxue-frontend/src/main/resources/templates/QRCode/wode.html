@@ -7,7 +7,7 @@
         <meta content="yes" name="apple-mobile-web-app-capable"/>
         <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
         <meta content="telephone=no" name="format-detection"/>
-        <link href="css/wode.css" rel="stylesheet" type="text/css"/>
+        <link href="/QRCode/css/wode.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <section class="aui-flexView">
@@ -63,6 +63,16 @@
         
         <script type="text/javascript" src="/utils/js/jquery.min.js"></script>
         <script type="text/javascript" src="/utils/js/constant.js"></script>
-        <script type="text/javascript" src="js/wode/wode.js"></script>
+        <script type="text/javascript" src="/QRCode/js/wode/wode.js"></script>
+        <script>
+        function toMod(){
+        	var openid=$('#openid').val();
+        	window.location.href='/qrcode/mod?openid='+openid;
+        }
+        function toModBind(){
+        	var openid=$('#openid').val();
+        	window.location.href='/qrcode/mod?openid='+openid;
+        }
+        </script>
     </body>
 </html>

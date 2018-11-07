@@ -5,3 +5,9 @@ spring:
       username: feng
       password: feng.123456
       driver-class-name: com.mysql.jdbc.Driver
+# server
+server:
+    port: 8084
+data:
+   name: 21
+HeadUrlHead: http://127.0.0.1:8085/user/getHead?headName=

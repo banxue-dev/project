@@ -26,10 +26,10 @@ public class StringUtils {
 	public static boolean isNullString(String... strs) {
 		for (String str : strs) {
 			if(isNullString(str)) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	/**
 	 * 校验请求参数,返回true表示不合格

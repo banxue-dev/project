@@ -217,7 +217,9 @@ var _ajax=function(parm){
 			if(parm.error){
 				parm.error();
 			}else{
+				console.log(JSON.stringify(data))
 				entity.errTips('请求错误。');
+				alert(JSON.stringify(data));
 			}
 		}
 	})

@@ -40,6 +40,25 @@ public class HttpUtils {
         }
         return respContent;
     }
+	public static String callpost(String url,JSONObject jsonParam,String Authorization) throws Exception {
+		
+		HttpPost httpPost = new HttpPost(url);
+		CloseableHttpClient client = HttpClients.createDefault();
+		String respContent = null;
+		
+		StringEntity entity = new StringEntity(jsonParam.toString(),"utf-8");//解决中文乱码问题    
+		httpPost.addHeader("Content-type",CONTENTYPE_APPLICTIONJSON);  
+		httpPost.addHeader("Authorization",Authorization);  
+		httpPost.setHeader("Accept", "application/json");  
+		httpPost.setEntity(entity);
+		
+		HttpResponse resp = client.execute(httpPost);
+		if(resp.getStatusLine().getStatusCode() == 200) {
+			HttpEntity he = resp.getEntity();
+			respContent = EntityUtils.toString(he,"UTF-8");
+		}
+		return respContent;
+	}
 	public static String test(String url,JSONObject jsonParam) throws Exception {
 		
 		HttpPost httpPost = new HttpPost(url);

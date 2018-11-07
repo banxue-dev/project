@@ -40,12 +40,14 @@ public class QRCodePageController {
 	@Autowired
 	private ICardService cardService;
 	@Value("${spring.profiles.active}")
-	private static String active;
-
+	private String active;
+	@Value("${HeadUrlHead}")
+	private String HeadUrlHead;
 	@GetMapping("/my")
 	public String toWodePage(HttpServletRequest request) {
 		try {
 			/**
+			 * https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect
 			 * 逻辑 1.获取到code后获取用户的openid，然后去后台查询此openid是否绑定了手机号。
 			 * 2.如果没有绑定或者后台没有保存过这条openId，直接跳转到绑定页面 。 3.如果后台没有保存过这条，则将此条用户入库。
 			 * 4.将此openid传入前台用于绑定。
@@ -62,33 +64,30 @@ public class QRCodePageController {
 				JSONObject openJson = ServiceUtil.getOpenId(wxcode);
 				openId = openJson.getString("openid");
 				access_token = openJson.getString("access_token");
-				request.setAttribute("token", access_token);
-				request.setAttribute("openId", openId);
 			} else {
 				openId = "001";
 				access_token = "";
 			}
 			// 步骤1
 			Wrapper<User> wrapper = new EntityWrapper<User>();
-			wrapper.addFilter("wx_opend_id", openId);
+			wrapper.where("wx_opend_id ={0}", openId);
 			request.setAttribute("openid", openId);
 			User user = userService.selectOne(wrapper);
 			if (user != null && user.getUserPhone() != null) {
 				// 步骤二
 				// 有这个用户，直接前往我的界面
-				request.setAttribute("headurl", Constants.HeadUrlHead+(user.getUserHeadUrl()==null?"zuofei.jpg":user.getUserHeadUrl()));
+				request.setAttribute("headurl", HeadUrlHead+(user.getUserHeadUrl()==null?"zuofei.jpg":user.getUserHeadUrl()));
 				request.setAttribute("nickname", user.getNickName());
 				request.setAttribute("message", user.getUserMessage());
 				// 获取二维码数据。
 				Wrapper<Card> cardw = new EntityWrapper<Card>();
 
-				cardw.addFilter("user_phone", user.getUserPhone());
+				cardw.where("user_phone={0}", user.getUserPhone());
 				Card card = cardService.selectOne(cardw);
 				request.setAttribute("cardNo", card.getCardNo());
 				return "QRCode/wode";
 			} else {
 
-				request.setAttribute("openId", openId);
 				if (user == null) {
 					// 获取微信用户的数据
 					JSONObject wxuser = ServiceUtil.getUserInfo(access_token, openId, wxcode, 0);
@@ -103,6 +102,7 @@ public class QRCodePageController {
 					iu.setUserSexual(wxuser.getString("sex"));
 					iu.setTokenModTime(new Date());
 					iu.setUserToken(access_token);
+					iu.setWxOpendId(openId);
 					userService.insert(iu);
 				}
 				// 访问绑定界面，令其进行手机号绑定
@@ -120,9 +120,48 @@ public class QRCodePageController {
 		 * 1.获取到二维码卡号 2.判断此卡号是否绑定过，没有则跳转到绑定页面。
 		 * 
 		 */
-		String cardNo = request.getParameter("cardNo");
+		String cardNo = request.getParameter("state");
 		if (StringUtils.isNullString(cardNo)) {
 			return "404";
+		}
+		// 获取用户id
+		String wxcode = request.getParameter("code");
+		if (StringUtils.isNullString(wxcode)) {
+			return "404";
+		}
+		String openId;
+		String access_token;
+		if (!StringUtils.twoStrMatch(active, "dev")) {
+
+			JSONObject openJson = ServiceUtil.getOpenId(wxcode);
+			openId = openJson.getString("openid");
+			access_token = openJson.getString("access_token");
+			request.setAttribute("token", access_token);
+			request.setAttribute("openId", openId);
+		} else {
+			openId = "001";
+			access_token = "";
+		}
+		Wrapper<User> wrapper = new EntityWrapper<User>();
+		wrapper.where("wx_opend_id={0}", openId);
+		request.setAttribute("openid", openId);
+		User user = userService.selectOne(wrapper);
+		if (user == null) {
+			// 获取微信用户的数据
+			JSONObject wxuser = ServiceUtil.getUserInfo(access_token, openId, wxcode, 0);
+			// 保存用户数据
+			User iu = new User();
+			iu.setCreateTime(new Date());
+			iu.setNickName(wxuser.getString("nickname"));
+			iu.setModTime(new Date());
+			iu.setUserHeadUrl(wxuser.getString("headimgurl"));
+			iu.setUserCity(wxuser.getString("city"));
+			iu.setUserProvince(wxuser.getString("province"));
+			iu.setUserSexual(wxuser.getString("sex"));
+			iu.setTokenModTime(new Date());
+			iu.setUserToken(access_token);
+			iu.setWxOpendId(openId);
+			userService.insert(iu);
 		}
 		request.setAttribute("cardNo", cardNo);
 		FileLog.debugLog("访问绑定页面");
@@ -139,28 +178,32 @@ public class QRCodePageController {
 			if (StringUtils.isNullString(cardNo)) {
 				return "404";
 			}
-			request.setAttribute("cardNo", cardNo);
 			Wrapper<Card> wra = new EntityWrapper<Card>();
-			wra.addFilter("card_no", cardNo);
+//			wra.addFilter("card_no", cardNo);
+			wra.where("card_no={0}", cardNo);
 			Card card = cardService.selectOne(wra);
 			if (card == null) {
 				return "404";
 			}
+			request.setAttribute("cardNo", cardNo);
 			if (StringUtils.isNullString(card.getUserPhone())) {
 				// 到绑定页面
-				return "QRCode/bind";
+				FileLog.debugLog("未找到对应卡片，跳转至绑定页面。");
+				return "QRCode/jump";
 			}
 			/**
 			 * 逻辑分析： 1.如果此卡片已经绑定了，则直接返回该卡片对应的用户信息
 			 */
 			Wrapper<User> wru = new EntityWrapper<User>();
-			wru.addFilter("user_phone", card.getUserPhone());
+//			wru.addFilter("user_phone", card.getUserPhone());
+			wru.where("user_phone={0}", card.getUserPhone());
 			User u = userService.selectOne(wru);
 			if (u == null) {
 				// 到绑定页面
-				return "QRCode/bind";
+				FileLog.debugLog("未找到用户，跳转至绑定页面。");
+				return "QRCode/jump";
 			}
-			request.setAttribute("headurl", Constants.HeadUrlHead+(u.getUserHeadUrl()==null?"zuofei.jpg":u.getUserHeadUrl()));
+			request.setAttribute("headurl", HeadUrlHead+(u.getUserHeadUrl()==null?"zuofei.jpg":u.getUserHeadUrl()));
 			request.setAttribute("message", u.getUserMessage());
 			request.setAttribute("nickname", u.getNickName());
 

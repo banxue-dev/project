@@ -8,8 +8,6 @@ spring:
       date-format: yyyy-MM-dd HH:mm:ss
    profiles:
       active: dev
-# server
-server:
-    port: 8084
-data:
-   name: 21
+   mvc: 
+      favicon: 
+         enabled: false

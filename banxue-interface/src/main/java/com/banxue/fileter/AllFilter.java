@@ -27,7 +27,7 @@ import com.banxue.utils.log.FileLog;
 @Configuration
 public class AllFilter implements Filter {
 	@Value("${jsonpurl}")
-	private static String jsonpurl;
+	private  String jsonpurl;
 	@Override
 	public void destroy() {
 		// TODO 此处为方法主题
@@ -39,7 +39,7 @@ public class AllFilter implements Filter {
 			throws IOException, ServletException {
 		// TODO 此处为方法主题
 	     HttpServletResponse response = (HttpServletResponse) servletResponse;
-	     response.setHeader("Access-Control-Allow-origin", "http://127.0.0.1:8084");
+	     response.setHeader("Access-Control-Allow-origin", jsonpurl);
 	     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 	     response.setHeader("Access-Control-Max-Age", "0");
 	     response.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");

@@ -25,6 +25,7 @@ public class WxUtils {
 	public static final String token_out_time = "7200000";// token超时时间单位：MS
 	public static final String wxservicetoken="nuocar";//微信服务器交互的凭证token
 	public static final String wxaeskey="nBzjNWYZam1g8j6u7KgrwJaoQ9Ld4EbT7xsvXfoSK97";//参与消息加解密的aeskey
+	public static final String MesModelKey1="7XgP7C8HczbgAK-c_uK7tNWBkzW8nSNqawpjxgaAJLA";//挪车提醒消息模板
     // 各种消息类型,除了扫带二维码事件
     
 	/**
@@ -47,7 +48,7 @@ public class WxUtils {
     }
     
 	/**
-	 * 获取acess_token
+	 * 获取access_token
 	 * @param appId
 	 * @param appsecret
 	 * @return

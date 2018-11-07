@@ -1,4 +1,6 @@
-var baseUrl="http://127.0.0.1:8085/";
+var baseUrl="http://10.9.38.148:8085/";
+//var baseUrl="http://127.0.0.1:8085/";
+//var baseUrl="http://www.yunhong66.com:8085/";
 var _getUserCar=baseUrl+"car/getUserCar";
 var _modCarBind=baseUrl+"user/modCarBind";
 var _modUser=baseUrl+"user/modUser";
