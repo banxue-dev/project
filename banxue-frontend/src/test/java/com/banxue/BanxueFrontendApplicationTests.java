@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 //@SpringBootTest
 public class BanxueFrontendApplicationTests {
 
-	@Test
 	public void contextLoads() {
 		try {
             FileReader read = new FileReader("C:\\Users\\fengchaseyou\\Desktop\\text.bson");
@@ -62,6 +63,15 @@ public class BanxueFrontendApplicationTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+
+	@Test
+	public void testMapToString() {
+    	Map<String,Object> param=new HashMap<String,Object>();
+		param.put("orderNo", "你好");
+    	param.put("lastStatus", "1");
+    	String s=param.toString();
+    	System.out.println(s);
 	}
 
 }

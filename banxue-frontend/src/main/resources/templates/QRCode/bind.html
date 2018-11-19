@@ -17,8 +17,8 @@
 <body style="background-color: #f4f4f4;">
 	<div id="_main" class="main"
 		style="width: 100%; background-color: #f4f4f4;">
-		<div id="_logo" class="_logo" style="width: 100%;">
-			<img id="" src="/QRCode/img/_head.jpg" style="width: 100%; height: 100%;" />
+		<div id="_logo" class="_logo" style="width: 100%;text-align: center;background-color: white;padding-top: 5px;">
+			<img id="" src="/QRCode/img/_head.jpg" style="width: 90%; " />
 		</div>
 		<div class="_content" id="_content" style="width: 100%;">
 			<div class="_top"
@@ -44,7 +44,7 @@
 
 					</div>
 					<input type="hidden" id="carNo" valid="required" tips="请选择车牌号!">
-					<input type="hidden" id="openId" value="${openId}">
+					<input type="hidden" id="openId" th:value="${openId}">
 					<input type="hidden" id="cardNo" th:value="${cardNo}">
 					<div style="margin-top: 20px; font-size: 14px;">请选择您的车牌号：</div>
 					<div class="car_input" style="">
@@ -92,7 +92,7 @@
 					url : _cardBindCar,
 					data : params,
 					success : function(data) {
-						window.location='/qrcode/my?openid='+$('#openid').val();
+						window.location='/qrcode/my?openid='+$('#openId').val();
 					}
 				})
 			} else {

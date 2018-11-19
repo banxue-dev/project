@@ -28,7 +28,7 @@
 					tips="请正确填写电话号码!">
 			</div>
 			<div class="pc-kk-form-list" style="width:100%;">
-				<input not="not" valid="Required" tips="请正确填写图像验证码!" type="text" id="tux" style="width:70%;" ><img src="/QRCode/img/yzm.png" style="width:100px;" />
+				<input not="not" valid="required" tips="请正确填写图像验证码!" type="text" id="tux" style="width:70%;" ><img src="/QRCode/img/yzm.png" style="width:100px;" />
 			</div>
 			<div style="margin-top: 10px;"></div>
 			<div class="pc-kk-form-list pc-kk-form-list-clear">
@@ -64,6 +64,11 @@
 					entity.codeNPass($('#userPhone'));
 					return;
 				}
+				var yzm=$('#tux').val();
+				if(yzm!="dwse"){
+					alert('验证码不正确。');
+					return "";
+				}
 				entity.codeDom = "_getCode";
 				entity.codeText = {
 					bef : 'S',
@@ -74,6 +79,11 @@
 				});
 			})
 			function _submit() {
+				var yzm=$('#tux').val();
+				if(yzm!="dwse"){
+					alert('验证码不正确。');
+					return "";
+				}
 				var params = validateFrom('subForm');
 				if (params.res) {
 					console.log('pass');
