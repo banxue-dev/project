@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>修改绑定车辆</title>
+<title>修改二维码绑定车辆</title>
 <link rel="stylesheet" href="/QRCode/css/modBind.css">
 <link rel="stylesheet" href="/QRCode/css/chep.css">
 
@@ -19,7 +19,7 @@
 		style="background: #ec5224; width: 100%; height: 50px; text-align: center; line-height: 50px;">
 		<img
 			style="width: 50px; height: 50px; float: left; z-index: 999999999;"
-			onclick="window.history.go(-1)" src="img/rpw_back_n.png" /> <span
+			onclick="window.history.go(-1)" src="/QRCode/img/rpw_back_n.png" /> <span
 			style="font-size: 14px; color: #fff;">修改绑定车辆</span>
 	</header>
 	<div class="pc-kk-form" id="subForm">
@@ -51,6 +51,7 @@
 				</ul>
 			</div>
 			<input type="hidden" not='not' id="openid" th:value="${openid}">
+			<input type="hidden"  id="cardNo" th:value="${cardNo}">
 			<input type="hidden"  id="carNo" valid="required" tips="请选择车牌号!" >
 			<div class="pc-kk-form-btn">
 				<button not='not' >提交</button>
@@ -72,7 +73,7 @@
 					url:_modCarBind,
 					data:params,
 					success:function(data){
-						window.history.go(-1);
+						window.location='/qrcode/my?openid='+$('#openid').val();
 					}
 				}) 
 			} else {

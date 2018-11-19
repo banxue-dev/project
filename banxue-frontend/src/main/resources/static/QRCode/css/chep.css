@@ -13,7 +13,7 @@
 	.ul_pro li span{ display:block; background-color:#fff; border-radius:4px; box-shadow: 2px 2px 2px #888888; /* max-width:48px; margin:0 auto; */ line-height:32px; padding-top:2px;  }
 .ul_pro li span:active{ background-color:#4DA9F2; color:#fff;}
 
-.ul_input{ padding:10px;width:350px; margin:0 auto; }
+.ul_input{ padding:10px;width:95%; margin:0 auto; }
 .ul_input li{ float:left; width:14%; padding:2px;text-align:center; }
 .ul_input li span{ display:block; background-color:#fff; border:1px solid #ccc; border-radius:4px; width:40px; margin:0 auto; height:40px; line-height:40px; }
 

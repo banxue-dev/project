@@ -18,7 +18,7 @@
 <input type="hidden" id="cardNo" th:value="${cardNo}" />
 	<script>
 	var cardNo=$('#cardNo').val();
-		var r_uri='http://www.yunhong66.com:8084/qrcode/bind';
+		var r_uri='http://www.banxue.fun/qrcode/bind';
 		r_uri=encodeURIComponent(r_uri);
 		console.log(r_uri);
 		window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24afd57c69514a36&redirect_uri='+r_uri+'&response_type=code&scope=snsapi_userinfo&state='+cardNo+'#wechat_redirect';

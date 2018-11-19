@@ -16,4 +16,5 @@ import com.baomidou.mybatisplus.service.IService;
 public interface IPrivateNumService extends IService<PrivateNum> {
 
 	List<PrivateNum> getListByState(Integer state);
+	PrivateNum getPrivateNumByUserPhone(String phone);
 }

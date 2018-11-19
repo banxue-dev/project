@@ -66,7 +66,8 @@ public class ServiceUtil {
 		System.out.println("openJsonStr1:" + openJsonStr);
 		JSONObject openJson = JSONObject.parseObject(openJsonStr);
 		String errcode=openJson.getString("errcode");
-		if(errcode!="0" || !"0".equals(errcode)) {
+		if(errcode!=null && (errcode!="0" || !"0".equals(errcode))) {
+			FileLog.debugLog("获取用户信息失败。");
 			return null;
 		}
 		/*if(errcode=="41001" || "41001".equals(errcode)) {

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Controller;
  * @since 2018-09-25
  */
 @Controller
-@RequestMapping("/project")
+@RequestMapping("/")
 public class ProjectController {
 	
 	@Autowired
@@ -28,11 +28,9 @@ public class ProjectController {
 	@Value("${server.port}")
 	private String port;
 	
-	@RequestMapping("/test")
-	@ResponseBody
+	@RequestMapping("/")
 	public String test() {
-		FileLog.debugLog("你是一个二货");
-		return "22";
+		return "QRCode/test";
 	}
 
 }

@@ -1,4 +1,4 @@
-
+/*
 $(function(){
 	var cardNo=$('#cardNo').val();
 	$.ajax({
@@ -24,4 +24,4 @@ function toModBind(){
 function toMod(){
 	var _openid=$('#openid').val();
 	window.location.href='mod?openid='+_openid;
-}
+}*/

@@ -128,6 +128,11 @@ var validateFrom = function(FormId) {
 		var thDom = $(inps[i]);
 		var vthen = thDom.attr('valid');
 		var thenVal = thDom.val();
+		//如果有not这个属性，表示此值不参与提交
+		if (thDom.attr('not') != 'not') {
+			var thId = thDom.attr('id');
+			params[thId] = thenVal;
+		}
 		if(!vthen){
 			//没有valid属性，直接跳过。
 			continue;
@@ -163,11 +168,7 @@ var validateFrom = function(FormId) {
 			}
 			entity.codePass(thDom);
 		}
-		//如果有not这个属性，表示此值不参与提交
-		if (thDom.attr('not') != 'not') {
-			var thId = thDom.attr('id');
-			params[thId] = thenVal;
-		}
+		
 	}
 	if (!res) {
 		entity.codeNPass(thDom);

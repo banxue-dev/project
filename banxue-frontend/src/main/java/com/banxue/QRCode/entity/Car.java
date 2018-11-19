@@ -16,8 +16,8 @@ import java.io.Serializable;
  * @author feng
  * @since 2018-09-27
  */
-@TableName("bx_nuo_card")
-public class Card extends Model<Card> {
+@TableName("bx_nuo_car")
+public class Car extends Model<Car> {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,42 +25,57 @@ public class Card extends Model<Card> {
     private Integer id;
 
     /**
-     * 编号
+     * 车牌号
+     */
+    @TableField("car_no")
+    private String carNo;
+    /**
+     * 二维码号
      */
     @TableField("card_no")
     private String cardNo;
 
     /**
-     * 用户电话
+     * 手机号绑定
      */
     @TableField("user_phone")
     private String userPhone;
-    
- 
 
-	/**
-     * 是否删除。0：正常，1：删除
+    /**
+     * 厂商
+     */
+    @TableField("car_firm")
+    private String carFirm;
+
+    /**
+     * 品牌
+     */
+    @TableField("car_brand")
+    private String carBrand;
+
+    /**
+     * 型号
+     */
+    @TableField("car_model")
+    private String carModel;
+
+    /**
+     * 是否删除
      */
     @TableField("is_del")
     private Integer isDel;
 
     /**
-     * 卡片链接地址
+     * 车辆颜色
      */
-    @TableField("card_link")
-    private String cardLink;
+    @TableField("car_color")
+    private String carColor;
 
     /**
-     * 卡片等级
+     * 车辆描述
      */
-    @TableField("card_level")
-    private Integer cardLevel;
-
-    /**
-     * 是否已经制成了实体二维码0：未，1，已经
-     */
-    @TableField("is_entity")
-    private Integer isEntity;
+    @TableField("car_desc")
+    private String carDesc;
 
     /**
      * 创建时间
@@ -81,12 +96,12 @@ public class Card extends Model<Card> {
     public void setId(Integer id) {
         this.id = id;
     }
-    public String getCardNo() {
-        return cardNo;
+    public String getCarNo() {
+        return carNo;
     }
 
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
+    public void setCarNo(String carNo) {
+        this.carNo = carNo;
     }
     public String getUserPhone() {
         return userPhone;
@@ -95,6 +110,27 @@ public class Card extends Model<Card> {
     public void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
     }
+    public String getCarFirm() {
+        return carFirm;
+    }
+
+    public void setCarFirm(String carFirm) {
+        this.carFirm = carFirm;
+    }
+    public String getCarBrand() {
+        return carBrand;
+    }
+
+    public void setCarBrand(String carBrand) {
+        this.carBrand = carBrand;
+    }
+    public String getCarModel() {
+        return carModel;
+    }
+
+    public void setCarModel(String carModel) {
+        this.carModel = carModel;
+    }
     public Integer getIsDel() {
         return isDel;
     }
@@ -102,26 +138,19 @@ public class Card extends Model<Card> {
     public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
-    public String getCardLink() {
-        return cardLink;
+    public String getCarColor() {
+        return carColor;
     }
 
-    public void setCardLink(String cardLink) {
-        this.cardLink = cardLink;
+    public void setCarColor(String carColor) {
+        this.carColor = carColor;
     }
-    public Integer getCardLevel() {
-        return cardLevel;
-    }
-
-    public void setCardLevel(Integer cardLevel) {
-        this.cardLevel = cardLevel;
-    }
-    public Integer getIsEntity() {
-        return isEntity;
+    public String getCarDesc() {
+        return carDesc;
     }
 
-    public void setIsEntity(Integer isEntity) {
-        this.isEntity = isEntity;
+    public void setCarDesc(String carDesc) {
+        this.carDesc = carDesc;
     }
     public Date getCreateTime() {
         return createTime;
@@ -143,16 +172,26 @@ public class Card extends Model<Card> {
         return this.id;
     }
 
-    @Override
+    public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
+	}
+
+	@Override
     public String toString() {
-        return "Card{" +
+        return "Car{" +
         "id=" + id +
-        ", cardNo=" + cardNo +
+        ", carNo=" + carNo +
         ", userPhone=" + userPhone +
+        ", carFirm=" + carFirm +
+        ", carBrand=" + carBrand +
+        ", carModel=" + carModel +
         ", isDel=" + isDel +
-        ", cardLink=" + cardLink +
-        ", cardLevel=" + cardLevel +
-        ", isEntity=" + isEntity +
+        ", carColor=" + carColor +
+        ", carDesc=" + carDesc +
         ", createTime=" + createTime +
         ", modTime=" + modTime +
         "}";

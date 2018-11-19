@@ -36,7 +36,6 @@ public class TimerTask {
 //	@Scheduled(cron = "*/5 * * * * ?")
 	@Scheduled(cron = "0 0 0/2 * * ? ")
     public void scheduledByWxToken(){
-        FileLog.debugLog("执行更新微信token任务定时。");
         if(StringUtils.twoStrMatch("pro", ispro)) {
         	updateWxToken();
         }
@@ -45,8 +44,6 @@ public class TimerTask {
 	public void scheduledByPrivateNum(){
 		if(StringUtils.twoStrMatch("pro", ispro)) {
 			updatePrivateNumer();
-		}else {
-			FileLog.debugLog("执行更新号码任务定时。");
 		}
 	}
 	/**
@@ -59,6 +56,7 @@ public class TimerTask {
 		JSONObject obj=WxUtils.geWxtAccessToken();
         String token=obj.getString("access_token");
         WxConstants.WxToken=token;
+        FileLog.debugLog("微信token已更新。"+token);
 	}
 	/**
 	 * 释放隐私号码。
@@ -85,8 +83,11 @@ public class TimerTask {
 					}else {
 						FileLog.debugLog("解绑失败"+re.getDesc());
 					}
+
+			        FileLog.debugLog("任务已执行。释放号码："+tn.getPrivateNumber());
 				}
 			}
+
 		}catch(Exception e) {
 			FileLog.errorLog("定时任务出错："+e);
 		}

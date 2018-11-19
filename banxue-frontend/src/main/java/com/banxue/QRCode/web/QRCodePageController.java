@@ -1,6 +1,8 @@
 package com.banxue.QRCode.web;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.domain.Car;
+import com.banxue.QRCode.entity.Car;
 import com.banxue.QRCode.entity.Card;
 import com.banxue.QRCode.entity.User;
+import com.banxue.QRCode.service.ICarService;
 import com.banxue.QRCode.service.ICardService;
 import com.banxue.QRCode.service.IUserService;
 import com.banxue.utils.Constants;
@@ -39,6 +42,8 @@ public class QRCodePageController {
 	private IUserService userService;
 	@Autowired
 	private ICardService cardService;
+	@Autowired
+	private ICarService carService;
 	@Value("${spring.profiles.active}")
 	private String active;
 	@Value("${HeadUrlHead}")
@@ -54,19 +59,27 @@ public class QRCodePageController {
 			 */
 			// 获取用户id
 			String wxcode = request.getParameter("code");
-			if (StringUtils.isNullString(wxcode)) {
-				return "404";
-			}
+			String openidparam=request.getParameter("openid");
 			String openId;
 			String access_token;
-			if (!StringUtils.twoStrMatch(active, "dev")) {
+			//如果传递了opoenid，则直接使用，否则就从新获取
+			if(StringUtils.isNullString(openidparam)) {
 
-				JSONObject openJson = ServiceUtil.getOpenId(wxcode);
-				openId = openJson.getString("openid");
-				access_token = openJson.getString("access_token");
-			} else {
-				openId = "001";
-				access_token = "";
+				if (StringUtils.isNullString(wxcode)) {
+					return "404";
+				}
+				if (!StringUtils.twoStrMatch(active, "dev")) {
+
+					JSONObject openJson = ServiceUtil.getOpenId(wxcode);
+					openId = openJson.getString("openid");
+					access_token = openJson.getString("access_token");
+				} else {
+					openId = "001";
+					access_token = "";
+				}
+			}else {
+				openId=openidparam;
+				access_token="";
 			}
 			// 步骤1
 			Wrapper<User> wrapper = new EntityWrapper<User>();
@@ -76,21 +89,38 @@ public class QRCodePageController {
 			if (user != null && user.getUserPhone() != null) {
 				// 步骤二
 				// 有这个用户，直接前往我的界面
-				request.setAttribute("headurl", HeadUrlHead+(user.getUserHeadUrl()==null?"zuofei.jpg":user.getUserHeadUrl()));
+				String headurl=HeadUrlHead+(user.getUserHeadUrl()==null?"zuofei.jpg":user.getUserHeadUrl());
+				if(StringUtils.Str1ConstansStr2(user.getUserHeadUrl(), "http")) {
+					headurl=user.getUserHeadUrl();
+				}
+				request.setAttribute("headurl", headurl);
 				request.setAttribute("nickname", user.getNickName());
 				request.setAttribute("message", user.getUserMessage());
 				// 获取二维码数据。
-				Wrapper<Card> cardw = new EntityWrapper<Card>();
+				Wrapper<Car> cardw = new EntityWrapper<Car>();
 
 				cardw.where("user_phone={0}", user.getUserPhone());
-				Card card = cardService.selectOne(cardw);
-				request.setAttribute("cardNo", card.getCardNo());
+				List<Car> cards = carService.selectList(cardw);
+				List<Car> rcards = new ArrayList<Car>();
+				if(cards==null || cards.size()<1) {
+					//直接返回，
+					return "QRCode/wode";
+				}
+				for(Car c:cards) {
+					c.setUserPhone(StringUtils.HiddenPhone(c.getUserPhone()));
+					rcards.add(c);
+				}
+				request.setAttribute("cards", rcards);
 				return "QRCode/wode";
 			} else {
 
 				if (user == null) {
 					// 获取微信用户的数据
 					JSONObject wxuser = ServiceUtil.getUserInfo(access_token, openId, wxcode, 0);
+					if(wxuser==null) {
+						FileLog.debugLog("获取微信用户为空。");
+						return "404";
+					}
 					// 保存用户数据
 					User iu = new User();
 					iu.setCreateTime(new Date());
@@ -116,6 +146,11 @@ public class QRCodePageController {
 
 	@GetMapping("/bind")
 	public String toBindPage(HttpServletRequest request) {
+		if(StringUtils.twoStrMatch(active, "dev")) {
+
+			request.setAttribute("cardNo", "777777");
+			return "QRCode/bind";
+		}
 		/**
 		 * 1.获取到二维码卡号 2.判断此卡号是否绑定过，没有则跳转到绑定页面。
 		 * 
@@ -149,6 +184,10 @@ public class QRCodePageController {
 		if (user == null) {
 			// 获取微信用户的数据
 			JSONObject wxuser = ServiceUtil.getUserInfo(access_token, openId, wxcode, 0);
+			if(wxuser==null) {
+				FileLog.debugLog("错误的用户。");
+				return "404";
+			}
 			// 保存用户数据
 			User iu = new User();
 			iu.setCreateTime(new Date());
@@ -180,7 +219,7 @@ public class QRCodePageController {
 			}
 			Wrapper<Card> wra = new EntityWrapper<Card>();
 //			wra.addFilter("card_no", cardNo);
-			wra.where("card_no={0}", cardNo);
+			wra.where("card_no={0} and is_del={1}", cardNo,0);
 			Card card = cardService.selectOne(wra);
 			if (card == null) {
 				return "404";
@@ -203,7 +242,11 @@ public class QRCodePageController {
 				FileLog.debugLog("未找到用户，跳转至绑定页面。");
 				return "QRCode/jump";
 			}
-			request.setAttribute("headurl", HeadUrlHead+(u.getUserHeadUrl()==null?"zuofei.jpg":u.getUserHeadUrl()));
+			String headurl=HeadUrlHead+(u.getUserHeadUrl()==null?"zuofei.jpg":u.getUserHeadUrl());
+			if(StringUtils.Str1ConstansStr2(u.getUserHeadUrl(), "http")) {
+				headurl=u.getUserHeadUrl();
+			}
+			request.setAttribute("headurl", headurl);
 			request.setAttribute("message", u.getUserMessage());
 			request.setAttribute("nickname", u.getNickName());
 
@@ -224,16 +267,28 @@ public class QRCodePageController {
 		FileLog.debugLog("访问修改个人信息页面");
 		return "QRCode/mod";
 	}
-
-	@GetMapping("/modbind")
-	public String toModBindPage(HttpServletRequest request, String openid) {
+	
+	@GetMapping("/bindPhone")
+	public String bindPhone(HttpServletRequest request, String openid) {
 		if (StringUtils.isNullString(openid)) {
 			return "404";
 		} else {
 			request.setAttribute("openid", openid);
 		}
+		FileLog.debugLog("访问修改个人信息页面");
+		return "QRCode/bindPhone";
+	}
+
+	@GetMapping("/modbind")
+	public String toModBindPage(HttpServletRequest request, String openid,String cardNo) {
+		if (StringUtils.isNullString(openid,cardNo)) {
+			return "404";
+		} else {
+			request.setAttribute("openid", openid);
+			request.setAttribute("cardNo", cardNo);
+		}
 		FileLog.debugLog("访问修改绑定信息页面");
-		return "QRCode/modbind";
+		return "QRCode/modBind";
 	}
 
 	

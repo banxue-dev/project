@@ -34,30 +34,31 @@
                 </div>
                 <div class="divHeight"></div>
                 <div class="aui-flex-head">
-                    <div class="aui-flex-head-hd">我的二维码</div>
+                    <div class="aui-flex-head-hd">我的挪车码</div>
                     <div class="aui-flex-head-fr">--</div>
                 </div>
-                <div class="aui-text-flex">
-                    <p >NO:<label th:text="${cardNo}"></label></p>
-                    <h2>
-                        <em id="chepNo">-</em>
-                        <i style="display:none;" class="icon icon-dow"></i>
-                    </h2>
-                    <h3>已绑定:<label id="userPhone">-</label></h3>
-                </div>
-                <div class="aui-user-flex" >
-                    <div class="aui-user-flex-hd" style="display:none;">
-                        <img src="images/user.png" alt="">
-                    </div>
-                    <div class="aui-user-flex-bd">
-                        <h3>
-                             <em onclick="toModBind()">修改绑定信息</em>
-                        </h3>
-                    </div>
+                <div name="box" th:each="card : ${cards}" >
+	                <div  class="aui-text-flex">
+	                    <p >NO:<label id="cardNo" th:text="${card.cardNo}"></label></p>
+	                    <h2>
+	                        <em id="chepNo" th:text="${card.carNo}">-</em>
+	                        <i style="display:none;" class="icon icon-dow"></i>
+	                    </h2>
+	                    <h3>已绑定:<label id="userPhone" th:text="${card.userPhone}">-</label></h3>
+	                </div>
+	                <div class="aui-user-flex" >
+	                    <div class="aui-user-flex-hd" style="display:none;">
+	                        <img src="images/user.png" alt="">
+	                    </div>
+	                    <div class="aui-user-flex-bd">
+	                        <h3>
+	                             <em th:id="${card.cardNo}" onclick="toModBind(this)">修改绑定信息</em>
+	                        </h3>
+	                    </div>
+	                </div>
                 </div>
             </section>
             
-                    <input type="hidden" id="cardNo" th:value="${cardNo}">
                     <input type="hidden" id="openid" th:value="${openid}">
         </section>
         
@@ -69,9 +70,10 @@
         	var openid=$('#openid').val();
         	window.location.href='/qrcode/mod?openid='+openid;
         }
-        function toModBind(){
+        function toModBind(dom){
         	var openid=$('#openid').val();
-        	window.location.href='/qrcode/mod?openid='+openid;
+        	var cardNo=$(dom).attr('id');
+        	window.location.href='/qrcode/modbind?openid='+openid+'&cardNo='+cardNo;
         }
         </script>
     </body>

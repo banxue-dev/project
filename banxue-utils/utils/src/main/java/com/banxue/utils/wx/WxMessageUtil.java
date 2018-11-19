@@ -25,8 +25,8 @@ public class WxMessageUtil {
         if(msgType.contains("text")) {
         	
         	switch (content) {
-        	case "绑定":
-        		responseMsg="http://app.cdqckj.com/wx/ble/bindPage";
+        	case "主页":
+        		responseMsg="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24afd57c69514a36&redirect_uri=http%3A%2F%2Fwww.banxue.fun%2Fqrcode%2Fmy&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect";
         		break;
         	case "二货":
         		responseMsg="你才是二货。";

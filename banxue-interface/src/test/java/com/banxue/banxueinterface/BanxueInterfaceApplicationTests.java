@@ -7,11 +7,14 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.banxue.utils.Base64Utils;
 import com.banxue.utils.DateUtils;
 import com.banxue.utils.HttpUtils;
 import com.banxue.utils.MD5Utils;
+import com.banxue.utils.ResultEntity;
+import com.banxue.utils.StringUtils;
 import com.banxue.utils.ppc.HWConfig;
 import com.banxue.utils.ppc.service.IAXInterfaceDemo;
 import com.banxue.utils.ppc.service.impl.AXInterfaceDemoImpl;
@@ -22,6 +25,7 @@ public class BanxueInterfaceApplicationTests {
 
 	String accID="8a216da865ae11f80165b88ae40b0485";
 	String authToken="c5f4ad986c0d453a9be93724b803ba3a";
+	
 	public void contextLoads() {
 		
 		Date date=new Date();
@@ -43,10 +47,16 @@ public class BanxueInterfaceApplicationTests {
 		}
 		
 	}
-	
 	@Test
+	public void privateNumTest() {
+		 IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
+//	        ResultEntity t=ax.axBindNumber("+8613524954089", "+8617138398842", "0");
+	        ResultEntity t=ax.axUnbindNumber(null, "+8613524954089", "+8617138398842");
+//	        ax.axQueryBindRelation(null, "+8617360133424");
+//	        System.out.println(JSON.toJSONString(t));
+	}
 	public void ppctest() {
-		IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
+//		IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
 
         // 第一步: 号码绑定,即调用AX模式绑定接口
 //         ax.axBindNumber("+8617360133424", "+8617138398842", "0");
@@ -70,7 +80,12 @@ public class BanxueInterfaceApplicationTests {
 //         ax.axUnbindNumber(null, "+8613524954089", "+8617138398842");
 
         // 第七步: 商户可查询已订购的隐私号码的绑定信息,即调用AX模式绑定信息查询接口
-        ax.axQueryBindRelation("1541577150153c5b100cfb53240d2917401c189b84164", null);
+//		System.out.println(new Date().getTime());
+		if(StringUtils.RequestParmsV("789","24,6")) {
+			System.out.println("雀巢");
+		}
+		System.out.println("咖啡");
+//        ax.axQueryBindRelation("1541577150153c5b100cfb53240d2917401c189b84164", null);
 	}
 
 }

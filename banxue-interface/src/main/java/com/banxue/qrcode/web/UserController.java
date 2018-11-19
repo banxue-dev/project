@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -79,9 +80,12 @@ public class UserController {
 
 	@PostMapping("/modUser")
 	@ResponseBody
-	public R modUser(String message, String nickname, String openId, String headName) {
+	public R modUser(String message, String nickname, String openid, String headName) {
 		try {
-			User u = userService.getUserByOpenId(openId);
+			User u = userService.getUserByOpenId(openid);
+			if(u==null) {
+				return R.error("错误的用户。");
+			}
 			u.setNickName(nickname);
 			u.setUserMessage(message);
 			u.setUserHeadUrl(headName);
@@ -93,12 +97,43 @@ public class UserController {
 		}
 		return R.error();
 	}
+	@PostMapping("/userBindPhone")
+	@ResponseBody
+	public R userBindPhone(HttpServletRequest request, String userMessage,String openid, String validCode,String userPhone) {
+		try {
+			if (StringUtils.RequestParmsV(openid, validCode, userPhone)) {
+				return R.error("错误的参数。");
+			}
+			if(StringUtils.StrFilter(userMessage)) {
+				return R.error("错误的参数。");
+			}
+			HttpSession session = request.getSession();
+			String scode = (String) session.getAttribute(Constants.ValidteCodeName);
+			if (!StringUtils.twoStrMatch(scode, validCode)) {
+				return R.error("验证码错误。");
+			}
+			User u = userService.getUserByOpenId(openid);
+			if(u==null) {
+				return R.error("错误的用户。");
+			}
+			u.setUserMessage(userMessage);
+			u.setUserPhone(userPhone);
+			userService.updateById(u);
+			return R.ok();
+		} catch (Exception e) {
+			FileLog.errorLog(e, "更新用户信息异常。");
+		}
+		return R.error("绑定手机异常");
+	}
 
 	@ResponseBody
 	@PostMapping("/getUser")
 	public R getUser(String openId) {
 		try {
 			User u = userService.getUserByOpenId(openId);
+			if(u==null) {
+				return R.error("错误的用户。");
+			}
 			User ru = new User();
 			ru.setUserMessage(u.getUserMessage());
 			ru.setNickName(u.getNickName());
@@ -106,6 +141,32 @@ public class UserController {
 			return R.okdata(ru);
 		} catch (Exception e) {
 			FileLog.errorLog(e, "更新用户信息异常。");
+		}
+		return R.error();
+	}
+	@ResponseBody
+	@PostMapping("/getUserCards")
+	public R getUserCards(String openId) {
+		try {
+			User u = userService.getUserByOpenId(openId);
+			if(u!=null) {
+				// 获取二维码数据。
+				Wrapper<Car> cardw = new EntityWrapper<Car>();
+
+				cardw.where("user_phone={0}", u.getUserPhone());
+				List<Car> cars = carService.selectList(cardw);
+				List<Car> rcars = new ArrayList<Car>();
+				if(cars==null || cars.size()<1) {
+					return R.error("错误的信息。");
+				}
+				for(Car c:cars) {
+					c.setUserPhone(null);
+					rcars.add(c);
+				}
+				return R.okdata(rcars);
+			}
+		} catch (Exception e) {
+			FileLog.errorLog(e, "获取用户二维码。");
 		}
 		return R.error();
 	}
@@ -127,7 +188,7 @@ public class UserController {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				FileLog.errorLog(e,"异常");
 			}
 
 			String vcode = "";
@@ -137,7 +198,7 @@ public class UserController {
 			}
 			session.setAttribute(Constants.ValidteCodeName, vcode);
 			session.setAttribute(Constants.CODETIMEKEY, new Date().getTime() + "");
-			if (false) {
+			if (StringUtils.twoStrMatch("pro", active)) {
 				HashMap<String, Object> result = SendShortMessage.sendMess(telephone, vcode, "330663", "3");
 				if ("000000".equals(result.get("statusCode"))) {
 					// 正常返回输出data包体信息（map）
@@ -157,7 +218,7 @@ public class UserController {
 
 	@PostMapping(value = "/modCarBind", produces = "application/json;charset=UTF-8")
 	@ResponseBody()
-	public R modCarBind(HttpServletRequest request, String openid, String telephone, String carNo, String validCode) {
+	public R modCarBind(HttpServletRequest request, String openid, String telephone, String carNo, String validCode,String cardNo) {
 		try {
 			HttpSession session = request.getSession();
 			String scode = (String) session.getAttribute(Constants.ValidteCodeName);
@@ -175,14 +236,37 @@ public class UserController {
 			if (u == null) {
 				return R.error("错误的用户。");
 			}
+			
+			//新车信息
 			Wrapper<Car> wra = new EntityWrapper<Car>();
-			wra.eq("car_no", carNo);
+			wra.where("car_no={0} and is_del={1}", carNo,0);
 			Car car = carService.selectOne(wra);
 			if (car == null) {
-				return R.error("错误的车牌号");
+				//增加车辆信息。
+				Car ncar=new Car();
+				ncar.setCardNo(cardNo);
+				ncar.setCarNo(carNo);
+				ncar.setCreateTime(new Date());
+				ncar.setUserPhone(u.getUserPhone());
+				carService.insert(ncar);
+			}else {
+				if(!StringUtils.isNullString(car.getCardNo())) {
+					//这辆车已经绑定过
+					return R.error("这辆车已经绑定了其他卡片。");
+				}else {
+					car.setCardNo(cardNo);
+					carService.updateById(car);
+				}
 			}
-			car.setCarNo(carNo);
-			carService.updateById(car);
+			//旧车
+			Wrapper<Car> old = new EntityWrapper<Car>();
+			old.where("card_no={0} and is_del={1}", cardNo,0);
+			Car oc = carService.selectOne(old);
+			if(oc!=null) {
+				//删除旧车。
+				oc.setIsDel(1);
+				carService.updateById(oc);
+			}
 			return R.ok("成功");
 		} catch (Exception e) {
 			FileLog.errorLog(e);
@@ -245,14 +329,14 @@ public class UserController {
 				return R.error("验证码错误。");
 			}
 			Wrapper<Card> wra = new EntityWrapper<Card>();
-			wra.where("card_no={0}", cardNo);
+			wra.where("card_no={0} and is_del={1}", cardNo,0);
 			Card card = cardService.selectOne(wra);
 			if (card == null) {
 				return R.error("错误的卡号。");
 			}
 
 			Wrapper<Car> wa = new EntityWrapper<Car>();
-			wa.where("car_no={0}", carNo);
+			wa.where("card_no={0} and is_del={1}", cardNo,0);
 			Car car = carService.selectOne(wa);
 			if (car == null) {
 				car = new Car();
@@ -261,9 +345,9 @@ public class UserController {
 				car.setUserPhone(userPhone);
 				carService.insert(car);
 			} else {
-				if (!StringUtils.isNullString(car.getUserPhone())) {
-					// 如果这辆车已经绑定了用户，就不允许此次操作。
-					return R.error("此车已绑定用户。");
+				if (!StringUtils.isNullString(car.getCardNo())) {
+					// 如果这辆车已经有了卡，则不允许绑定，就不允许此次操作。
+					return R.error("此车已绑定用卡和用户。");
 				}
 			}
 			Wrapper<User> wua = new EntityWrapper<User>();
@@ -296,11 +380,10 @@ public class UserController {
 	public R sendMessageToWxUser(String cardNo, String carNo) {
 		try {
 			if (StringUtils.RequestParmsV(cardNo, carNo)) {
-				return R.error("错误的车牌号。");
+				return R.error("错误的参数。");
 			}
 			Wrapper<Car> wra = new EntityWrapper<Car>();
-			wra.addFilter("car_no", carNo);
-			wra.addFilter("card_no", cardNo);
+			wra.where("car_no={0} and card_no={1} and is_del={2}", carNo,cardNo,0);
 			Car car = carService.selectOne(wra);
 			if (car == null || StringUtils.isNullString(car.getUserPhone())) {
 				return R.error("错误的车牌号");
@@ -319,8 +402,7 @@ public class UserController {
 			param.put("touser", u.getWxOpendId());
 			param.put("template_id", WxUtils.MesModelKey1);
 			param.put("url", "");
-			param.put("touser", u.getWxOpendId());
-			
+			JSONObject data=new JSONObject();
 			JSONObject keword1=new JSONObject();
 			keword1.put("value", "您好，"+u.getUserPhone());
 			keword1.put("color", "#173177");
@@ -333,11 +415,13 @@ public class UserController {
 			JSONObject keword4=new JSONObject();
 			keword4.put("value", "您的爱车挡住其他车子或占用了消防通道。请您挪一下爱车。");
 			keword4.put("color", "#173177");
-			param.put("first", keword1);
-			param.put("keword1", keword2);
-			param.put("keword1", keword3);
-			param.put("remark", keword4);
-			HttpUtils.post(tmpurl, param);
+			data.put("first", keword1);
+			data.put("keyword1", keword2);
+			data.put("keyword2", keword3);
+			data.put("remark", keword4);
+			param.put("data", data);
+			String result=HttpUtils.post(tmpurl, param);
+			FileLog.debugLog(result);
 			return R.ok("已成功向该车主发出挪车通知，请耐心等待。");
 		} catch (Exception e) {
 			FileLog.errorLog(e);
@@ -353,10 +437,27 @@ public class UserController {
 				return R.error("错误的车牌号");
 			}
 			Wrapper<Car> wra = new EntityWrapper<Car>();
-			wra.where("car_no={0} and card_no={1}", carNo,cardNo);
+			wra.where("car_no={0} and card_no={1} and is_del={2}", carNo,cardNo,0);
 			Car car = carService.selectOne(wra);
 			if (car == null || StringUtils.isNullString(car.getUserPhone())) {
 				return R.error("错误的车牌号");
+			}
+			PrivateNum tpn=iPrivateNumService.getPrivateNumByUserPhone(car.getUserPhone());
+			if(tpn!=null && tpn.getState()==1 && tpn.getBindGxId()!=null) {
+				//已经绑定了。直接使用
+				return R.okdata(tpn.getPrivateNumber());
+			}
+			
+			/**
+			 * 先获取是否已经自己绑定过的号码。
+			 */
+			PrivateNum pnt=iPrivateNumService.getPrivateNumByUserPhone(car.getUserPhone());
+			if(pnt!=null) {
+				//如果已经有了一个绑定。那么更新修改时间
+				pnt.setModTime(new Date());
+				pnt.setModTimeLong(new Date().getTime()+"");
+
+	        	iPrivateNumService.updateById(pnt);
 			}
 			/**
 			 * 获取空闲的号码。
@@ -366,11 +467,14 @@ public class UserController {
 				//有号码
 				PrivateNum pn=lst.get(0);
 		        IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
-		        ResultEntity t=ax.axBindNumber(car.getUserPhone(), pn.getPrivateNumber(), "0");
+		        ResultEntity t=ax.axBindNumber("+86"+car.getUserPhone(), "+86"+pn.getPrivateNumber(), "0");
 		        if(t.isState()) {
 		        	//绑定成功,修改这个号码的状态
 		        	pn.setState(1);//使用中
 		        	pn.setBindGxId(t.getData().toString());
+		        	pn.setUserPhone(car.getUserPhone());
+		        	pn.setModTime(new Date());
+		        	pn.setModTimeLong(new Date().getTime()+"");
 		        	iPrivateNumService.updateById(pn);
 		        }
 				return R.okdata(pn.getPrivateNumber());

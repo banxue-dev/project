@@ -17,7 +17,7 @@
 	<header
 		style="background: #ec5224; width: 100%; height: 50px; text-align: center; line-height: 50px;">
 		<img
-			style="display:none;width: 50px; height: 50px; float: left; z-index: 999999999;"
+			style="width: 50px; height: 50px; float: left; z-index: 999999999;"
 			onclick="window.history.go(-1)" src="/QRCode/img/rpw_back_n.png" />
 		<span style="font-size: 14px; color: #fff;">绑定你的电话号码</span>
 	</header>
@@ -26,6 +26,9 @@
 			<div class="pc-kk-form-list">
 				<input type="text" id="userPhone" placeholder="手机号码" valid="phone"
 					tips="请正确填写电话号码!">
+			</div>
+			<div class="pc-kk-form-list" style="width:100%;">
+				<input not="not" valid="Required" tips="请正确填写图像验证码!" type="text" id="tux" style="width:70%;" ><img src="/QRCode/img/yzm.png" style="width:100px;" />
 			</div>
 			<div style="margin-top: 10px;"></div>
 			<div class="pc-kk-form-list pc-kk-form-list-clear">
@@ -78,7 +81,7 @@
 						url : _userBindPhone,
 						data : params,
 						success : function(data) {
-							window.location='/qrcode/my?openid='+$('#openid').val();
+							window.history.go(-1);
 						}
 					})
 				} else {

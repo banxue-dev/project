@@ -35,5 +35,12 @@ public class PrivateNumServiceImpl extends ServiceImpl<PrivateNumMapper, Private
 		wra.where("state={0}",state);
 		return privateNumMapper.selectList(wra);
 	}
+	@Override
+	public PrivateNum getPrivateNumByUserPhone(String phone) {
+		// TODO 此处为方法主题
+		PrivateNum pn=new PrivateNum();
+		pn.setUserPhone(phone);
+		return privateNumMapper.selectOne(pn);
+	}
 
 }
