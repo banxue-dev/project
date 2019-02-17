@@ -19,8 +19,6 @@ import org.springframework.stereotype.Controller;
  * @author feng
  * @since 2018-09-25
  */
-@Controller
-@RequestMapping("/")
 public class ProjectController {
 	
 	@Autowired

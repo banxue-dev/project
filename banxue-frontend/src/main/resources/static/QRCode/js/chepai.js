@@ -60,7 +60,7 @@ var next=0;
 				next=0;
 			}
 		}else{
-			if(next>5){
+			if(next>6){
 				return
 			}
 			for(var i = 0; i<$(".input_pp").length;i++){

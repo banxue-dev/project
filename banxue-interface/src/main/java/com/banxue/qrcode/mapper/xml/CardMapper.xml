@@ -13,6 +13,7 @@
         <result column="is_entity" property="isEntity" />
         <result column="create_time" property="createTime" />
         <result column="mod_time" property="modTime" />
+        <result column="card_pass" property="cardPass" />
     </resultMap>
 
 </mapper>

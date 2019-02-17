@@ -43,6 +43,7 @@
 							<li class="input_pp"><span></span></li>
 							<li class="input_pp"><span></span></li>
 							<li class="input_pp"><span></span></li>
+							<li class="input_pp"><span></span></li>
 						</ul>
 					</div>
 				</div>
@@ -61,10 +62,14 @@
 				</div>
 			</div>
 		</div>
+		
 		<input type="hidden" id="cardNo" th:value="${cardNo}" />
 		<div id="_bottom_comt" style="width: 100%; background-color: white;">
-
 			<input type="hidden" id="carNo" valid="required" tips="请选择车牌号!">
+			<div style="padding-left:2.5%;font-size:12px;color:red;">Tips:</div>
+			<div style="padding-left:2.5%;font-size:12px;color:red;">1.输入完成记得点击右下角的确认按钮哦。</div>
+			<div style="padding-left:2.5%;font-size:12px;color:red;">2.非新能源车最后一位车牌无需填写。</div>
+			<div style="padding-left:2.5%;font-size:12px;color:red;">3.想拥有自己的吉祥号二维码?淘宝搜索<label style="color:green;">半雪无忧挪车码。</label></div>
 		</div>
 	</div>
 	<script type="text/javascript" src="/utils/js/jquery.min.js"></script>
@@ -89,7 +94,14 @@
 			$('#_bottom_comt').css('height', (_screen.height * 0.34));
 			chepInit();
 		}
+		entity.codeBorder=false;
+		var callIsCD=false;//是否在cd中。
+		var wxIsCD=false;//是否在cd中。
 		function sendWxMessage() {
+			if(wxIsCD){
+				entity.errTips('请10S后再尝试呢。', 'red');
+				return;
+			}
 			var params = validateFrom('_bottom_comt');
 			if (params.res) {
 				var cardNo = $('#cardNo').val();
@@ -102,13 +114,21 @@
 					},
 					success : function(data) {
 						entity.errTips('已成功提醒该车主。', 'green');
+						wxIsCD=true;
+						setTimeout(function(){
+							wxIsCD=false;
+						},10*1000);
 					}
 				})
 			}
 
 		}
 		function callUserPhone() {
-			var params = validateFrom('_content');
+			if(callIsCD){
+				entity.errTips('请10S后再尝试呢。', 'red');
+				return;
+			}
+			var params = validateFrom('_bottom_comt');
 			if (params.res) {
 				var cardNo = $('#cardNo').val();
 				var carNo = $('#carNo').val();
@@ -120,6 +140,10 @@
 					},
 					success : function(data) {
 						entity.errTips('点击呼叫，即可拨打电话。', 'green');
+						callIsCD=true;
+						setTimeout(function(){
+							callIsCD=false;
+						},10*1000);
 						//$('#call_phone').trigger('click');
 						window.location.href="tel:"+data;
 					}

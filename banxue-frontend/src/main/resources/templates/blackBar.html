@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>畅享青春-业务办理-存150送480</title>
+	<script src="/utils/js/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var isBegin=false;
+		function testBegin(){
+			var time=25;
+			$('#sum').text(0);
+			$('#view').text(time);
+			isBegin=true;
+			var i=setInterval(function(){
+				$('#view').text(--time);
+				if(time<=0){
+					window.clearInterval(i);
+					isBegin=false;
+				}
+			},1000);
+		}
+		function testClick(){
+		if(!isBegin){
+			return;
+		}
+			var c=$('#sum').text();
+			$('#sum').text(c*1+1);
+		}
+		var _screen = {
+			width : window.screen.availWidth,
+			height : $(window).height()
+		};
+		window.onload = function() {
+			$('#test').css('height', (_screen.height));
+		}
+	</script>
+</head>
+<body style="">
+
+	<label id="sum" style="left:50%;top:50%;position:absolute;">0</label>
+<div onclick="testBegin()" style="width:100%;text-align:center;">开始</div>
+<div onclick="testTime()" id="view" style="width:100%;text-align:center;margin-top:40px;">25</div>
+<div onclick="testClick()" id="view2" style="float:left;width:100px;margin-top:30%;height:60px;background-color:#a98b5a;" ></div>
+<div onclick="testClick()" id="view1" style="float:right;width:100px;margin-top:30%;height:60px;background-color:#a98b5a;"></div>
+	
+</body>
+</html>

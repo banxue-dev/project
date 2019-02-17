@@ -25,7 +25,7 @@
 				style="width: 100%; height: 100%; background-color: white; text-align: center;">
 				<div class="_top_main">
 					<div style="">
-						<label style="">您是第一次使用，请先进行绑定。</label>
+						<label style="">此卡是第一次使用，请需先进行绑定。</label>
 					</div>
 					<div style="margin-top: 20px; border-bottom: 1px solid aliceblue;">NO:<label th:text="${cardNo}">--</label></div>
 					<div style="width:95%;">
@@ -40,6 +40,11 @@
 							<label  style="color:#767676;">验证码:</label><input type="text" id="validCode" valid="required" tips="验证码不能为空!"
 								placeholder="请输入验证码"
 								style="width:75%; height: 24px; border: 0px solid #dc5d41; border-bottom: 1px solid #dc5d41; font-size: 16px;" />
+						</div>
+						<div style="width: 100%;margin-top: 20px; border-bottom: 1px solid aliceblue;">
+							<label style="color:#767676;">卡密:</label><input type="text" id="cardPwd" valid="required" tips="请正确输入卡密!"
+								placeholder="请输入卡密"
+								style="width:75%;height: 24px; border: 0px solid #dc5d41; border-bottom: 1px solid #dc5d41; font-size: 16px;" />
 						</div>
 
 					</div>
@@ -56,17 +61,19 @@
 							<li class="input_pp"><span></span></li>
 							<li class="input_pp"><span></span></li>
 							<li class="input_pp"><span></span></li>
+							<li class="input_pp"><span></span></li>
 						</ul>
 					</div>
 					<button id="_bottom_sub"
 						style="width: 50%; cursor: pointer; height: 24px; border: none; background-color: #dc5d41; color: #fff; border-radius: 5px; margin-bottom: 5px;">绑定</button>
 
-					<div class="_bottom" style="font-size: 12px;">
-						温馨提示：若你未注册过本平台，将为您自动注册。</div>
-				</div>
+					
 			</div>
 		</div>
 		<div id="_bottom_comt" style="width: 100%; background-color: white;">
+			<div style="padding-left:2.5%;font-size:12px;color:red;">Tips:</div>
+			<div style="padding-left:2.5%;font-size:12px;color:red;">1.输入完成记得点击右下角的确认按钮哦。</div>
+			<div style="padding-left:2.5%;font-size:12px;color:red;">2.非新能源车最后一位车牌无需填写。</div>
 		</div>
 	</div>
 

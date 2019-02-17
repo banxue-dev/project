@@ -14,6 +14,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import com.banxue.utils.pay.wex.pojo.ImageEntity;
+import com.banxue.utils.pay.wex.pojo.ImageMessage;
 import com.banxue.utils.pay.wex.pojo.TextMessage;
 import com.thoughtworks.xstream.XStream;
 
@@ -64,6 +66,7 @@ public class StrXmlToMap {
 		return buf.toString();
 
 	}
+	//
 	/**
      * 将文本消息转换为xml
      * 
@@ -75,6 +78,11 @@ public class StrXmlToMap {
         xStream.alias("xml", textMessage.getClass());
         return xStream.toXML(textMessage);
     }
+    static String imageMessageToXml(ImageMessage imageMessage) {
+    	XStream xStream = new XStream();
+    	xStream.alias("xml", imageMessage.getClass());
+    	return xStream.toXML(imageMessage);
+    }
     public static String initText(String toUserName, String fromUserName,
             String content) {
         TextMessage text = new TextMessage();
@@ -84,6 +92,18 @@ public class StrXmlToMap {
         text.setCreateTime(new Date().getTime());
         text.setContent(content);
         return textMessageToXml(text);
+    }
+    public static String initImages(String toUserName, String fromUserName,
+    		String MediaId) {
+    	ImageMessage text = new ImageMessage();
+    	text.setFromUserName(toUserName);
+    	text.setToUserName(fromUserName);
+    	text.setMsgType(WxConstants.MESSAtGE_IMAGE);
+    	text.setCreateTime(new Date().getTime());
+    	ImageEntity ie=new ImageEntity();
+    	ie.setMediaId(MediaId);
+    	text.setImage(ie);
+    	return imageMessageToXml(text);
     }
 
 }

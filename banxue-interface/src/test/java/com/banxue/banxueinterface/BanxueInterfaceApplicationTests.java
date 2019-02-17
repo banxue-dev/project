@@ -1,6 +1,8 @@
 package com.banxue.banxueinterface;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +49,6 @@ public class BanxueInterfaceApplicationTests {
 		}
 		
 	}
-	@Test
 	public void privateNumTest() {
 		 IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
 //	        ResultEntity t=ax.axBindNumber("+8613524954089", "+8617138398842", "0");
@@ -55,6 +56,7 @@ public class BanxueInterfaceApplicationTests {
 //	        ax.axQueryBindRelation(null, "+8617360133424");
 //	        System.out.println(JSON.toJSONString(t));
 	}
+	@Test
 	public void ppctest() {
 //		IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
 
@@ -81,10 +83,10 @@ public class BanxueInterfaceApplicationTests {
 
         // 第七步: 商户可查询已订购的隐私号码的绑定信息,即调用AX模式绑定信息查询接口
 //		System.out.println(new Date().getTime());
-		if(StringUtils.RequestParmsV("789","24,6")) {
-			System.out.println("雀巢");
-		}
-		System.out.println("咖啡");
+		List<String> te=new ArrayList<String>();
+		te.add("123");
+		te.add("1789");
+		System.out.println("--"+te.toString());
 //        ax.axQueryBindRelation("1541577150153c5b100cfb53240d2917401c189b84164", null);
 	}
 

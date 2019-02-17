@@ -318,9 +318,9 @@ public class UserController {
 
 	@RequestMapping(value = "/cardBindCar", produces = "application/json;charset=UTF-8")
 	@ResponseBody()
-	public R cardBindCar(HttpServletRequest request, String carNo, String validCode, String userPhone, String cardNo,String openId) {
+	public R cardBindCar(HttpServletRequest request, String carNo, String validCode, String userPhone, String cardNo,String openId,String cardPwd) {
 		try {
-			if (StringUtils.RequestParmsV(cardNo, carNo, validCode, userPhone,openId)) {
+			if (StringUtils.RequestParmsV(cardNo, carNo, validCode, userPhone,openId,cardPwd)) {
 				return R.error("错误的参数。");
 			}
 			HttpSession session = request.getSession();
@@ -329,25 +329,39 @@ public class UserController {
 				return R.error("验证码错误。");
 			}
 			Wrapper<Card> wra = new EntityWrapper<Card>();
-			wra.where("card_no={0} and is_del={1}", cardNo,0);
+			wra.where("card_no={0} and card_pass={1} and is_del={2}", cardNo,cardPwd,0);
 			Card card = cardService.selectOne(wra);
 			if (card == null) {
 				return R.error("错误的卡号。");
+			}else if(card.getIsEntity()!=null && card.getIsEntity()==0){
+				/**
+				 * ==0,表示暂时还不能使用。
+				 */
+				return R.error("此卡尚未激活。");
 			}
 
 			Wrapper<Car> wa = new EntityWrapper<Car>();
-			wa.where("card_no={0} and is_del={1}", cardNo,0);
+			wa.where("is_del={0} and car_no={1}",0,carNo);
 			Car car = carService.selectOne(wa);
-			if (car == null) {
-				car = new Car();
-				car.setCardNo(cardNo);
-				car.setCarNo(carNo);
-				car.setUserPhone(userPhone);
-				carService.insert(car);
+			/*
+			 * 如果没有这辆车，或者这辆车没有绑定卡。才可以进行绑定
+			 */
+			if (car == null || car.getCardNo()==null) {
+				if(car==null) {
+					car = new Car();
+					car.setCardNo(cardNo);
+					car.setCarNo(carNo);
+					car.setUserPhone(userPhone);
+					carService.insert(car);
+				}else {
+					car.setCardNo(cardNo);
+					car.setUserPhone(userPhone);
+					carService.updateById(car);
+				}
 			} else {
 				if (!StringUtils.isNullString(car.getCardNo())) {
 					// 如果这辆车已经有了卡，则不允许绑定，就不允许此次操作。
-					return R.error("此车已绑定用卡和用户。");
+					return R.error("此车已绑定卡和用户。");
 				}
 			}
 			Wrapper<User> wua = new EntityWrapper<User>();
@@ -357,13 +371,14 @@ public class UserController {
 				// 没有用户，注册一个
 				u = new User();
 				u.setUserPhone(userPhone);
-				u.setUserMessage("若需要挪车，请电话联系。");
+				u.setUserMessage("临时停靠,请多关照");
 				u.setNickName("挪车码用户");
 				u.setWxOpendId(openId);
 				userService.insert(u);
 			}else {
 				//更新电话号码
 				u.setUserPhone(userPhone);
+				u.setUserMessage("临时停靠,请多关照");
 				userService.updateById(u);
 			}
 			card.setUserPhone(userPhone);

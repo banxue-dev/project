@@ -72,6 +72,12 @@ public class Card extends Model<Card> {
     @TableField("mod_time")
     private Date modTime;
 
+    /**
+     * 卡片密码
+     */
+    @TableField("card_pass")
+    private String cardPass;
+    
     public Integer getId() {
         return id;
     }
@@ -141,7 +147,16 @@ public class Card extends Model<Card> {
         return this.id;
     }
 
-    @Override
+    
+    public String getCardPass() {
+		return cardPass;
+	}
+
+	public void setCardPass(String cardPass) {
+		this.cardPass = cardPass;
+	}
+
+	@Override
     public String toString() {
         return "Card{" +
         "id=" + id +

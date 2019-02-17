@@ -38,7 +38,6 @@ public class AllFilter implements Filter {
 		// TODO 此处为方法主题
 		 HttpServletRequest request = (HttpServletRequest) servletRequest;
 	     HttpServletResponse response = (HttpServletResponse) servletResponse;
-	     FileLog.debugLog("经过了过滤器");
 	     filterChain.doFilter(request, response);
 
 	}

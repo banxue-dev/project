@@ -52,8 +52,8 @@ public class QRCodePageController {
 	public String toWodePage(HttpServletRequest request) {
 		try {
 			/**
-			 * https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect
-			 * 逻辑 1.获取到code后获取用户的openid，然后去后台查询此openid是否绑定了手机号。
+			 * https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=http%3A%2F%2Fwww.banxue.fun%2Fqrcode%2Fmy&response_type=code&scope=SCOPE&state=STATE#wechat_redirect
+			 * 逻辑 1.获取到code后获取用户的openid，然后去后台查询此openid是否绑定了手机号。http%3A%2F%2Fwww.banxue.fun%2Fqrcode%2Fmy
 			 * 2.如果没有绑定或者后台没有保存过这条openId，直接跳转到绑定页面 。 3.如果后台没有保存过这条，则将此条用户入库。
 			 * 4.将此openid传入前台用于绑定。
 			 */
@@ -159,6 +159,17 @@ public class QRCodePageController {
 		if (StringUtils.isNullString(cardNo)) {
 			return "404";
 		}
+		Wrapper<Card> wra = new EntityWrapper<Card>();
+		wra.where("card_no={0} and is_del={1}", cardNo,0);
+		Card card = cardService.selectOne(wra);
+		if (card == null) {
+			 return "404";
+		}else if(card.getIsEntity()!=null && card.getIsEntity()==0){
+			/**
+			 * ==0,表示暂时还不能使用。
+			 */
+			 return "404";
+		}
 		// 获取用户id
 		String wxcode = request.getParameter("code");
 		if (StringUtils.isNullString(wxcode)) {
@@ -210,6 +221,11 @@ public class QRCodePageController {
 	@GetMapping("/index")
 	public String toIndexPage(HttpServletRequest request, String cardNo) {
 		try {
+//			request.setAttribute("headurl", "https://qr.api.cli.im/qr?data=http%253A%252F%252Fwww.banxue.fun%252Fqrcode%252Findex%253FcardNo%253D100014&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=260&kid=cliim&key=127878ca0533d96402bc42866d8c4241");
+//			request.setAttribute("message", "测试测试");
+//			request.setAttribute("nickname", "纷纷");
+//
+//			return "QRCode/index";
 			/**
 			 * 1.获取到二维码卡号 2.判断此卡号是否绑定过，没有则跳转到绑定页面。
 			 * 
@@ -218,7 +234,6 @@ public class QRCodePageController {
 				return "404";
 			}
 			Wrapper<Card> wra = new EntityWrapper<Card>();
-//			wra.addFilter("card_no", cardNo);
 			wra.where("card_no={0} and is_del={1}", cardNo,0);
 			Card card = cardService.selectOne(wra);
 			if (card == null) {
@@ -227,7 +242,7 @@ public class QRCodePageController {
 			request.setAttribute("cardNo", cardNo);
 			if (StringUtils.isNullString(card.getUserPhone())) {
 				// 到绑定页面
-				FileLog.debugLog("未找到对应卡片，跳转至绑定页面。");
+				FileLog.debugLog("未绑定用户，跳转至绑定页面。");
 				return "QRCode/jump";
 			}
 			/**
@@ -291,6 +306,10 @@ public class QRCodePageController {
 		return "QRCode/modBind";
 	}
 
-	
+	@GetMapping("/blackbar")
+	public String blackbar(HttpServletRequest request) {
+		
+		return "blackBar";
+	}
 
 }
