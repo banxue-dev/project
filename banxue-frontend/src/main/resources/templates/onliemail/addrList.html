@@ -96,7 +96,7 @@
 		style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; background-color: white;  z-index: 0;">
 		<section class="aui-flexView">
 			<header class="aui-navBar aui-navBar-fixed"
-				style="background-color: #F4F4F4;">
+				style="background-color: #F4F4F4; display:none;">
 				<a href="javascript:;" onclick="hide_new_addrList()"
 					class="aui-navBar-item"> ✗ </a>
 				<div class="aui-center">
@@ -121,13 +121,11 @@
 							style="line-height: 40px; color: #555; margin-left：7px; font-size: 14px; cursor: pointer;"
 							onclick="show_new_addrEdit(this)" th:attr="addrId=${addr.addrId}">编辑</div>
 					</div>
+					<hr size="1" />
 				</div>
-				<hr size="1" />
 			</section>
 		</section>
 	</div>
-	<input  type="hidden" id="openid" th:value="${openid}" />
-	<input  type="hidden" id="goodsid" th:value="${goodsId}" />
 	<script src="/utils/js/jquery.min.js"></script>
 	<script src="/utils/js/utils.js"></script>
 	<script src="/onlinemail/js/city.js"></script>
@@ -135,7 +133,8 @@
 	<script>
 		//防止重复点击
 		var submit = false;
-
+		//去掉边框变色
+		entity.codeBorder=false;
 		function editAddre() {
 			if (submit) {
 				return;
@@ -169,7 +168,7 @@
 		}
 		function callbacka(dom){
 			var addrId=$(dom).attr('data-id');
-			window.location.href='/bxNuoOrder/toPayPage/?goodsId='+$('#goodsid').val()+'&addrId='+addrId+"&openid="+$('#userOpenid').val();
+			window.location.href='/bxNuoOrder/toPayPage/?goodsid='+$('#goodsid').val()+'&addrId='+addrId+"&openid="+$('#userOpenid').val();
 		}
 	</script>
 	<script>

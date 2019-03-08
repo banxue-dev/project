@@ -148,7 +148,7 @@ var refTAB;
 		                        }
 							}
                         html+='<a href="javascript:;" class="aui-mail-payment">';
-	                        html+='<p>'+order.createTime;
+	                        html+='<p>'+order.createTime+'</p><p>'
 	                            html+='共<em>'+goods.length+'</em>';
 	                                html+='件商品 实付款: ￥<i>'+order.totailPrice+'</i>';
 	                        html+='</p>';
