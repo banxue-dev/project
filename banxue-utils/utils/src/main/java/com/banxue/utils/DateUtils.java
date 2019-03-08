@@ -13,7 +13,7 @@ public class DateUtils {
      */
     public final static String DATE_PATTERN = "yyyy-MM-dd";
     /**
-     * 时间戳格式
+     * 时间戳格式yyyyMMddHHmmss
      */
     public final static String DATE_TIME_STAMP = "yyyyMMddHHmmss";
     public final static String DATE_TIME_STAMP_MS = "yyyyMMddHHmmssSSS";
@@ -32,9 +32,6 @@ public class DateUtils {
             return df.format(date);
         }
         return null;
-    }
-    public static String getOrderNo() {
-    	return "QC01"+format(new Date(), DATE_TIME_STAMP_MS);
     }
     
     public static Date stringToDate(String sdate) {

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.banxue.utils.HttpUtils;
+import com.banxue.utils.StringUtils;
 import com.banxue.utils.log.FileLog;
 import com.banxue.utils.wx.StrXmlToMap;
 import com.banxue.utils.wx.WxUtils;
@@ -63,7 +64,7 @@ public class ServiceUtil {
 		}*/
 		String openParam = "access_token=" + acc_token + "&openid=" + openid + "&lang=zh_CN";
 		String openJsonStr = HttpUtils.sendGET("https://api.weixin.qq.com/sns/userinfo", openParam);
-		System.out.println("openJsonStr1:" + openJsonStr);
+		FileLog.debugLog("openJsonStr1:" + openJsonStr);
 		JSONObject openJson = JSONObject.parseObject(openJsonStr);
 		String errcode=openJson.getString("errcode");
 		if(errcode!=null && (errcode!="0" || !"0".equals(errcode))) {
@@ -115,12 +116,15 @@ public class ServiceUtil {
 			strBuf.append(line).append("\n");
 		}
 		in.close();
-		System.out.println("result=========返回的xml=============" + strBuf.toString());
 		Map<String, String> orderMap = StrXmlToMap.strXmltoMap(strBuf.toString());
-		System.out.println("orderMap===========================" + orderMap);
+		if(StringUtils.twoStrMatch(orderMap.get("result_code"), "SUCCESS")) {
+			// 获取
+			String prepay_id = orderMap.get("prepay_id");
+			return prepay_id;
+		}else {
+			FileLog.debugLog("下单失败了。");
+			return null;
+		}
 
-		// 获取
-		String prepay_id = orderMap.get("prepay_id");
-		return prepay_id;
 	}
 }

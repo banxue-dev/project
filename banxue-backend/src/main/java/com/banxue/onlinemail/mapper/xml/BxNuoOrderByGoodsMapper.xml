@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxue.onlinemail.mapper.BxNuoOrderByGoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.banxue.onlinemail.entity.BxNuoOrderByGoods">
+        <id column="buy_goods_id" property="buyGoodsId" />
+        <result column="goods_id" property="goodsId" />
+        <result column="buy_count" property="buyCount" />
+        <result column="buy_price" property="buyPrice" />
+        <result column="order_code" property="orderCode" />
+    </resultMap>
+
+</mapper>

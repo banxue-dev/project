@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>确认订单</title>
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
+	name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<link href="/onlinemail/css/style.css" rel="stylesheet"
+	type="text/css" />
+<link href="/onlinemail/css/address.css" rel="stylesheet"
+	type="text/css" />
+<style type="text/css">
+.el-row {
+	box-sizing: border-box;
+}
+
+.scolleShow {
+	overflow: auto;
+	margin-top: 5px;
+	height: 60px;
+}
+
+.addAddressCons {
+	font-weight: bold;
+}
+
+.addAddress {
+	float: right;
+	color: #05226C;
+	cursor: pointer;
+}
+</style>
+</head>
+<body style="background: #f7f7f7">
+	
+	<div id="showAddrEdit"
+		style="width: 100%; height: 100%; position: absolute; top: 0px;display:none; left: 0px; background-color: white;  z-index: 1;">
+		<section class="aui-flexView">
+			<header class="aui-navBar aui-navBar-fixed">
+				<a href="javascript:;" onclick="hide_new_addrEdit()"
+					class="aui-navBar-item"> ✗ </a>
+				<div class="aui-center">
+					<span class="aui-center-title"></span>
+				</div>
+				<a href="javascript:;" onclick="editAddre();" class="aui-navBar-item"> <i
+					class="icon icon-sys"></i> 保存
+
+				</a>
+			</header>
+			<section class="aui-scrollView" id="editFrom">
+			
+				<input  type="hidden" id="userOpenid" th:value="${openid}" />
+				<input  type="hidden" id="goodsid" th:value="${goodsId}" />
+				<input  type="hidden" id="addrId"  />
+				<div class="aui-address-box">
+					<div class="aui-address-cell-item">
+						<div class="aui-cell-name">收货人</div>
+						<div class="aui-cell-input">
+							<input type="text" class="cell-input" id="userName"   valid="required" placeholder="请输入收货人姓名!"
+								autocomplete="off">
+						</div>
+					</div>
+					<div class="aui-address-cell-item">
+						<div class="aui-cell-name">联系电话</div>
+						<div class="aui-cell-input">
+							<input type="text" class="cell-input" id="addrPhone"  valid="required,phone"  placeholder="请输入收货人电话!"
+								autocomplete="off">
+						</div>
+					</div>
+					<div class="aui-address-cell-item">
+						<div class="aui-cell-name">所在地区</div>
+						<div class="aui-cell-input cell-input-text">
+							<input type="text"  class="cell-input" id="addrZone"  valid="required"  readonly="readonly"
+								 placeholder="请选择收货地址">
+						</div>
+					</div>
+					<div class="aui-address-cell-item">
+						<div class="aui-cell-name">详细地址</div>
+						<div class="aui-cell-input">
+							<input type="text"   valid="required" id="addrDetail"  class="cell-input" placeholder="请输入详细地址"
+								autocomplete="off">
+						</div>
+					</div>
+					<div class="aui-radio">
+						<input type="checkbox" id="isDeafualt"  checked="" >设为默认地址
+					</div>
+				</div>
+			</section>
+		</section>
+	</div>
+	<div id="showAddrList"
+		style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; background-color: white;  z-index: 0;">
+		<section class="aui-flexView">
+			<header class="aui-navBar aui-navBar-fixed"
+				style="background-color: #F4F4F4;">
+				<a href="javascript:;" onclick="hide_new_addrList()"
+					class="aui-navBar-item"> ✗ </a>
+				<div class="aui-center">
+					<span class="aui-center-title">选择收货地址</span>
+				</div>
+			</header>
+			<section class="aui-scrollView">
+				<div class="scolleShow" style="height: 40px" th:each="addr : ${datas}">
+					<div style="display: inline; float: left; width: 80%; padding-left: 7px;" th:attr="data-id=${addr.addrId}" onclick="callbacka(this)" >
+						<div>
+							<label th:text="${addr.userName}" id="r_name">唐杰</label><label
+								style="margin-left: 10px; font-size: 12px;" id="r_phone" th:text="${addr.addrPhone}">135254594089</label>
+						</div>
+						<div style="font-size: 12px;">
+							<label id="r_zone" th:text="${addr.addrZone}"></label><label id="r_detail" th:text="${addr.addrDetail}">四川省达州市宣汉县其余西路万象城12</label>
+						</div>
+					</div>
+					<div
+						style="display: inline; float: left; width: 10%; text-align: center; border-left: 1px solid #F4F4F4; margin-left: 7px;">
+						<label></label>
+						<div
+							style="line-height: 40px; color: #555; margin-left：7px; font-size: 14px; cursor: pointer;"
+							onclick="show_new_addrEdit(this)" th:attr="addrId=${addr.addrId}">编辑</div>
+					</div>
+				</div>
+				<hr size="1" />
+			</section>
+		</section>
+	</div>
+	<input  type="hidden" id="openid" th:value="${openid}" />
+	<input  type="hidden" id="goodsid" th:value="${goodsId}" />
+	<script src="/utils/js/jquery.min.js"></script>
+	<script src="/utils/js/utils.js"></script>
+	<script src="/onlinemail/js/city.js"></script>
+	<script src="/onlinemail/js/address.js"></script>
+	<script>
+		//防止重复点击
+		var submit = false;
+
+		function editAddre() {
+			if (submit) {
+				return;
+			}
+			submit = true;
+			//传递code和state去addOrder增加订单
+			var order = validateFrom('editFrom');
+			if(!order.res){
+				submit = false;
+				return;
+			}
+			//获取数据后
+			$.ajax({
+				type : "POST",
+				url : "/bxNuoAddr/mod",
+				async : true,
+				data : order,
+				success : function(data) {
+					if(data.code=="000000"){
+						alert('保存成功');
+						//刷新当前页面
+						window.location.reload();
+					}else{
+						alert(data.msg);
+					}
+					submit = false;
+				},error:function(){
+					submit = false;
+				}
+			});
+		}
+		function callbacka(dom){
+			var addrId=$(dom).attr('data-id');
+			window.location.href='/bxNuoOrder/toPayPage/?goodsId='+$('#goodsid').val()+'&addrId='+addrId+"&openid="+$('#userOpenid').val();
+		}
+	</script>
+	<script>
+		
+		!function() {
+			var $target = $('#addrZone');
+
+			$target.citySelect();
+
+			$target.on('click', function(event) {
+				event.stopPropagation();
+				$target.citySelect('open');
+			});
+
+			$target.on('done.ydui.cityselect', function(ret) {
+				$(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+			});
+		}();
+		/**
+		 * 设置默认值
+		 */
+		function show_new_addrList() {
+			$('#showAddrList').show();
+		}
+		function hide_new_addrList() {
+			$('#showAddrList').hide();
+		}
+		function show_new_addrEdit(dom) {
+			//获取数据后
+			$.ajax({
+				type : "POST",
+				url : "/bxNuoAddr/getAddr",
+				async : true,
+				data : {addrId:$(dom).attr('addrId')},
+				success : function(data) {
+					if(data.code=="000000"){
+						var addr=data.data;
+						setFormValue("editFrom",addr);
+						$('#showAddrEdit').show();
+					}
+				}
+			});
+		}
+		function hide_new_addrEdit() {
+			$('#showAddrEdit').hide();
+		}
+		function selectAddr(addrId) {
+
+		}
+	</script>
+</body>
+
+</html>

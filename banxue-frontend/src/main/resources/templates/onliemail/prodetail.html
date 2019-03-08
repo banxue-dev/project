@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width,
+                              initial-scale=1,
+                              minimum-scale=1,
+                              maximum-scale=1" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<title>商品详情</title>
+<link rel="stylesheet" href="/onlinemail/css/swiper.min.css">
+<link href="/onlinemail/css/app.css" rel="stylesheet">
+</head>
+<body class="item">
+
+	<section class="home">
+		<a style="display: none;" href=""></a>
+	</section>
+
+	<section class="images">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide" th:each="img1 : ${imgs}">
+					<img th:src="${img1}" />
+				</div>
+			</div>
+			<!-- Add Pagination -->
+			<div class="swiper-pagination"></div>
+		</div>
+	</section>
+
+	<section class="header">
+		<h2 class="title" th:text="${goods.goodsName}">良品铺子 金牌肉松饼380g
+			（十个装）</h2>
+		<div class="price ">
+			<div class="current-price">
+				<span class="current-price"><small>￥</small><label
+					th:text=${goods.goodsPrice}>15.9</label></span>
+			</div>
+			<span class="express" style="display:none;">¥20.00</span>
+		</div>
+		<div class="sales">已经售出: 200</div>
+	</section>
+
+	<section class="sku">
+		<dl class="sku-group">
+			<dt>规格:</dt>
+			<dd>标准</dd>
+		</dl>
+	</section>
+
+	<section class="content">
+		<div class="nav">
+			<a data-id="xiangqing" >商品详情</a> 
+		</div>
+		<div id="xiangqing" class="desc" th:utext="${goods.goodsDetail}">
+
+		</div>
+	</section>
+	<input type="hidden" id="openid" th:value="${openid}" />
+	<input type="hidden" id="goodsid" th:value="${goods.goodsId}" />
+	<section class="layer">
+		<div class="content">
+			<div class="head">
+				<a class="close"></a>
+			</div>
+			<div class="bd">
+				<dl>
+					<dt>本网价</dt>
+					<dd>
+						<span>￥<b>6.80</b></span>
+					</dd>
+				</dl>
+				<dl>
+					<dt>规格</dt>
+					<dd>
+						<ul id="sku">
+							<li><a data-sku=10 class="active">标准</a><i></i></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+			<div class="foot">
+				<a class="next" href="">下一步</a>
+			</div>
+		</div>
+
+	</section>
+
+	<footer class="footer">
+		<span class="server"><a></a></span>
+		<div class="button">
+			<a class="buy" onclick="toAddOrder();">立即购买</a>
+		</div>
+	</footer>
+
+	<script src="/utils/js/jquery.min.js"></script>
+	<script src="/onlinemail/js/swiper.min.js"></script>
+	<script src="/onlinemail/js/jquery.lazyload.js"></script>
+	<script>
+		//兼容性：字体大小，全局尺寸(rem)
+		(function(doc, win) {
+			var docEl = doc.documentElement, resizeEvt = 'orientationchange' in window ? 'orientationchange'
+					: 'resize', recalc = function() {
+				var clientWidth = docEl.clientWidth;
+				if (!clientWidth)
+					return;
+				var docElWidth = 100 * (clientWidth / 640);
+				if (docElWidth > 100)
+					docElWidth = 100;
+				docEl.style.fontSize = docElWidth + 'px';
+			};
+			if (!doc.addEventListener)
+				return;
+			win.addEventListener(resizeEvt, recalc, false);
+			doc.addEventListener('DOMContentLoaded', recalc, false);
+		})(document, window);
+		//前往购买界面
+		function toAddOrder() {
+			var openid=$('#openid').val();
+			var goodsid=$('#goodsid').val();
+			window.location = "/bxNuoOrder/toPayPage/?openid=" + openid+"&goodsid="+goodsid;
+		}
+		(function() {
+			//轮播图
+			new Swiper('.swiper-container', {
+				pagination : '.swiper-pagination',
+				paginationClickable : true,
+				autoplay : 3000
+			});
+
+			$('.nav a').click(function() {
+				$('.nav a').removeClass('active');
+				$(this).addClass('active');
+			})
+			//sku
+			$('.sku').click(function(){
+				$('.layer').addClass('acitve');
+			})
+			$('.close,.next').click(function() {
+				$('.layer').removeClass('acitve');
+			});
+			//却动
+			$('#sku a').click(function() {
+				/* console.log(this);
+				$('#sku a').removeClass('active');
+				$(this).addClass('active');
+				$('.next').attr('href', path + $(this).data('sku'));
+				$('.sku-group dd').text($(this).text());
+				$('#xiangqing').toggle(50);
+				$('#guige').toggle(50) */
+			});
+			//图片懒加载
+			$("img").lazyload({
+				effect : 'fadeIn',
+				placeholder : 'http://img.weizhi.so/placeholder.png'
+			});
+
+		})();
+	</script>
+</body>
+</html>

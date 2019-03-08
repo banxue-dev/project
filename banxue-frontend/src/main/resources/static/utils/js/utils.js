@@ -70,7 +70,7 @@ var entity = {
 	 * 单元行验证不通过
 	 */
 	codeNPass : function(dom) {
-		entity.errTips(dom.attr('tips'));
+		entity.errTips(dom.attr('tips') || dom.attr('placeholder'));
 		if(entity.codeBorder){
 			dom.parent('div').css('border', '1px solid red');
 		}
@@ -89,7 +89,7 @@ var entity = {
 			$('#_errTips').text(msg);
 
 		} else {
-			var tipsHtml = '<div id="_errTips" style="border-radius:5px;font-size:12px;top:20px;position:fixed;width:80%;left:10%;height:40px;line-height:40px;text-align:center;background-color:'+(_tipcolor||'#ec5224')+';">'
+			var tipsHtml = '<div id="_errTips" style="z-index:9999;border-radius:5px;font-size:12px;top:20px;position:fixed;width:80%;left:10%;height:40px;line-height:40px;text-align:center;background-color:'+(_tipcolor||'#ec5224')+';">'
 					+ msg + '</div>';
 			$('body').append(tipsHtml);
 		}
@@ -108,7 +108,7 @@ var entity = {
 		if (isload) {
 			$('#_loading').show();
 		} else {
-			var loadHtml = '<div id="_loading" style="border-radius:5px;top:0px;font-size:12px;position:fixed;width:100%;height:100%;text-align:center;background-color:black;opacity:0.5;"><div style="margin-top:10%;color:white;">加载中..</div></div>';
+			var loadHtml = '<div id="_loading" style="style="z-index:999999;border-radius:5px;top:0px;font-size:12px;position:fixed;width:100%;height:100%;text-align:center;background-color:black;opacity:0.5;"><div style="margin-top:10%;color:white;">加载中..</div></div>';
 			$('body').append(loadHtml);
 		}
 	},
@@ -126,55 +126,91 @@ var validateFrom = function(FormId) {
 	var thDom;
 	for (var i = 0; i < inps.size(); i++) {
 		var thDom = $(inps[i]);
-		var vthen = thDom.attr('valid');
+		var vthens = thDom.attr('valid');
 		var thenVal = thDom.val();
 		//如果有not这个属性，表示此值不参与提交
 		if (thDom.attr('not') != 'not') {
 			var thId = thDom.attr('id');
-			params[thId] = thenVal;
+			if(thDom.attr('type')=='checkbox'){
+				if(thDom.prop("checked")){
+					params[thId]=0;
+				}else{
+					params[thId]=1;
+				}
+			}else{
+				params[thId] = thenVal;
+			}
 		}
-		if(!vthen){
+		if(!vthens){
 			//没有valid属性，直接跳过。
 			continue;
 		}
-		if (vthen == 'required') {
-			if (thenVal == '') {
-				res = false;
-				break;
+		vthens=vthens.split(',');
+		for(var j=0;j<vthens.length;j++){
+			var vthen=vthens[j];
+			if (vthen == 'required') {
+				if (thenVal == '') {
+					res = false;
+					break;
+				}
+				entity.codePass(thDom);
+			}else if (vthen == 'phone') {
+				var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+				if (!phoneReg.test(thenVal)) {
+					res = false;
+					break;
+				}
+				entity.codePass(thDom);
+			}else if (vthen == 'ID') {
+				var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+				if (reg.test(thenVal) === false) {
+					res = false;
+					break;
+				}
+				entity.codePass(thDom);
+			}//如果valid=att，则表示要与他的某个属性值做比较,这里使用v-value
+			else if (vthen == 'att') {
+				if (thenVal == thDom.attr('v-value')) {
+					res = false;
+					break;
+				}
+				entity.codePass(thDom);
+			}else if(vthen=='len'){
+				var mx=thDom.attr('max')*1;
+				var mn=thDom.attr('min')*1;
+				if(thenVal.length<min || thenVal.length>max){
+					res = false;
+					break;
+				}
 			}
-			entity.codePass(thDom);
+
 		}
-		if (vthen == 'phone') {
-			var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
-			if (!phoneReg.test(thenVal)) {
-				res = false;
-				break;
-			}
-			entity.codePass(thDom);
+
+		if (!res) {
+			entity.codeNPass(thDom);
+			break;
 		}
-		if (vthen == 'ID') {
-			var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-			if (reg.test(thenVal) === false) {
-				res = false;
-				break;
-			}
-			entity.codePass(thDom);
-		}
-		//如果valid=att，则表示要与他的某个属性值做比较,这里使用v-value
-		if (vthen == 'att') {
-			if (thenVal == thDom.attr('v-value')) {
-				res = false;
-				break;
-			}
-			entity.codePass(thDom);
-		}
-		
-	}
-	if (!res) {
-		entity.codeNPass(thDom);
 	}
 	params['res'] = res;
 	return params;
+}
+/**
+ * 为表单赋值
+ */
+var setFormValue = function(FormId,params) {
+	var inps = $('#'+FormId+' :input');
+	var data = params;
+	var thDom;
+	for (var i = 0; i < inps.size(); i++) {
+		var thDom = $(inps[i]);
+		var vthens = thDom.attr('id');
+		if(thDom.attr('type')=='checkbox'){
+			var isChecked=params[vthens]==0?true:false;
+			thDom.attr("checked", isChecked);
+		}else{
+			thDom.val(params[vthens]);
+		}
+	}
 }
 $(function() {
 	/**

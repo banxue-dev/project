@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>查看物流</title>
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+        <meta content="yes" name="apple-mobile-web-app-capable"/>
+        <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+        <meta content="telephone=no" name="format-detection"/>
+        <link href="/onlinemail/css/wuliu.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <!--
+
+         页面素材源自17素材网
+
+        -->
+        <section class="aui-flexView">
+            <header class="aui-navBar aui-navBar-fixed b-line" style="display:none;">
+                <a href="javascript:;" class="aui-navBar-item">
+                    <i class="icon icon-return"></i>
+                </a>
+                <div class="aui-center">
+                    <span class="aui-center-title">查看物流</span>
+                </div>
+                <a href="javascript:;" class="aui-navBar-item">
+                    <i class="icon icon-more"></i>
+                </a>
+            </header>
+            <section class="aui-scrollView">
+                <div class="aui-flex aui-flex-lag">
+                    <div class="aui-aircraft-img">
+                        <img src="/onlinemail/images/icon-fj.png" alt="">
+                    </div>
+                    <div class="aui-flex-box">
+                        <h2>
+                            物流公司：<em th:text="${companyName}">等待发货</em>
+                        </h2>
+                        <h2>
+                            物流单号：<em ><input type="text" th:value="${wuliuno}" id="getWuliuNo" style="border:0px;width:120px;"/></em>
+                        </h2>
+                    </div>
+                    <div class="aui-text-copy" onclick="copyWuliuNo()">复制
+                    </div>
+                </div>
+                <div class="divHeight"></div>
+                <div class="aui-flex aui-flex-lag">
+                    <div class="aui-flex-box">
+                        <h2 style="color:#333">订单跟踪</h2>
+                    </div>
+                </div>
+                <div class="aui-timeLine b-line">
+                    <ul class="aui-timeLine-content" >
+                    	
+                        <li class="aui-timeLine-content-item" th:each="wuliu : ${datas}">
+                            <em class="aui-timeLine-content-icon"></em>
+                            <p th:text="${wuliu.context}">正在获取..</p>
+                            <p style="margin-top: 10px;" th:text="${wuliu.time}">--</p>
+                        </li>
+                        <li class="aui-timeLine-content-item" th:if="${datas == null}">
+                            <em class="aui-timeLine-content-icon"></em>
+                            <p >您提交了订单，请等待系统确认</p>
+                            <p style="margin-top: 10px;">--</p>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <div class="b-line divHeight"></div>
+            </section>
+            <footer class="aui-footer aui-footer-fixed" style="display:none;">
+                <div class="aui-artificial">
+                    <i class="icon icon-air"></i>
+                    人工客服
+                
+                </div>
+            </footer>
+        </section>
+        <script type="text/javascript">
+            function copyWuliuNo() {
+                var wuliu = document.getElementById("getWuliuNo");
+                wuliu.select(); // 
+                document.execCommand("Copy"); // 
+                alert("已复制");
+            }
+        </script>
+    </body>
+</html>

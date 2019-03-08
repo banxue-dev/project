@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxue.onlinemail.mapper.BxNuoGoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.banxue.onlinemail.entity.BxNuoGoods">
+        <id column="goods_id" property="goodsId" />
+        <result column="goods_name" property="goodsName" />
+        <result column="goods_imgs" property="goodsImgs" />
+        <result column="goods_detail" property="goodsDetail" />
+        <result column="goods_count" property="goodsCount" />
+        <result column="goods_brand" property="goodsBrand" />
+        <result column="sale_id" property="saleId" />
+        <result column="goods_keyword" property="goodsKeyword" />
+        <result column="create_time" property="createTime" />
+        <result column="goods_remark" property="goodsRemark" />
+        <result column="goods_title_img" property="goodsTitleImg" />
+        <result column="goods_price" property="goodsPrice" />
+    </resultMap>
+
+</mapper>

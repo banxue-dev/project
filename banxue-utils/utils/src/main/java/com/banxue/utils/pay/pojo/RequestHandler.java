@@ -9,6 +9,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.banxue.utils.MD5Utils;
+import com.banxue.utils.log.FileLog;
 import com.banxue.utils.pay.wex.WxPayConfig;
 
 /**
@@ -21,21 +22,21 @@ public class RequestHandler {
 
 
     
-   /** ���url��ַ */
+   /** */
    private String gateUrl;
     
-   /** ��Կ */
+   /**  */
    private String key;
     
-   /** ����Ĳ��� */
+   /**  */
    private SortedMap parameters;
     
-   /** debug��Ϣ */
+   /** debug */
    private String debugInfo;
     
     
    /**
-    * ���캯��
+    * 
     * @param request
     * @param response
     */
@@ -114,14 +115,14 @@ public class RequestHandler {
    }
 
    /**
-   *��ȡdebug��Ϣ
+   *
    */
    public String getDebugInfo() {
        return debugInfo;
    }
     
    /**
-    * ��ȡ����������URL
+    * URL
     * @return String
     * @throws UnsupportedEncodingException 
     */
@@ -144,7 +145,7 @@ public class RequestHandler {
            }
        }
         
-       //ȥ�����һ��&
+       //
        String reqPars = sb.substring(0, sb.lastIndexOf("&"));
         
        return this.getGateUrl() + "?" + reqPars;
@@ -153,7 +154,7 @@ public class RequestHandler {
     
     
    /**
-    * ����md5ժҪ,������:���������a-z����,������ֵ�Ĳ���μ�ǩ��
+    * 
     */
    protected void createSign() {
        StringBuffer sb = new StringBuffer();
@@ -169,7 +170,7 @@ public class RequestHandler {
            }
        }
        sb.append("key=" + WxPayConfig.KEY);
-       System.out.println(sb.toString());
+       FileLog.debugLog("加密前："+sb.toString());
        String sign = MD5Utils.MD5Encode(sb.toString(), WxPayConfig.CHARTSET).toUpperCase();
         
        this.setParameter("sign", sign);

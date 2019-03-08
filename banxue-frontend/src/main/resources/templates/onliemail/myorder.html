@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>我的订单</title>
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+        <meta content="yes" name="apple-mobile-web-app-capable"/>
+        <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+        <meta content="telephone=no" name="format-detection"/>
+        <link href="/onlinemail/css/myorder.css" rel="stylesheet" type="text/css"/>
+        <link href="/onlinemail/css/loaders.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="/utils/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/onlinemail/js/tab.js"></script>
+    </head>
+    <body>
+
+	<input  type="hidden" id="openid" th:value="${openid}" />
+        <section class="aui-flexView">
+            <header class="aui-navBar aui-navBar-fixed" style="display:none;">
+                <a href="javascript:;" class="aui-navBar-item">
+                    <i class="icon icon-return"></i>
+                </a>
+                <div class="aui-center">
+                    <span class="aui-center-title">我的订单</span>
+                </div>
+                <a href="javascript:;" class="aui-navBar-item">
+                    <i class="icon icon-sys"></i>
+                </a>
+            </header>
+            <section class="aui-scrollView">
+                <div class="aui-tab" data-ydui-tab>
+                    <ul class="tab-nav">
+                        <li  class="tab-nav-item tab-active">
+                            <a id="first_" href="javascript:;">全部</a>
+                        </li>
+                        <li class="tab-nav-item">
+                            <a href="javascript:;">待付款</a>
+                        </li>
+                        <li class="tab-nav-item">
+                            <a id="first_3" href="javascript:;">待收货</a>
+                        </li>
+                        <li class="tab-nav-item">
+                            <a href="javascript:;">已完成</a>
+                        </li>
+                        <li class="tab-nav-item">
+                            <a href="javascript:;">已取消</a>
+                        </li>
+                    </ul>
+                    <div class="divHeight"></div>
+                    <div class="tab-panel">
+                        <div class="tab-panel-item tab-active">
+                        
+                        </div>
+                        <div class="tab-panel-item">
+                         
+                        </div>
+                        <div class="tab-panel-item">
+                            
+                        </div>
+                        <div class="tab-panel-item">
+                           
+                        </div>
+                        <div class="tab-panel-item">
+                        
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </body>
+    <script>
+		//防止重复点击
+		var submit = false;
+
+		$(document).ready(
+				function() {
+					$('#first_').trigger('click');
+					$('.click_li').click(function(t) {
+						$('.click_li').removeClass('selected');
+						$(this).addClass('selected');
+						var price = $(this).attr('price');
+						$('.rechnum').html(price + '.00 元');
+					});
+					//绑定微信事件
+					if (typeof WeixinJSBridge == "undefined") {
+						if (document.addEventListener) {
+							document.addEventListener('WeixinJSBridgeReady',
+									onBridgeReady, false);
+						} else if (document.attachEvent) {
+							document.attachEvent('WeixinJSBridgeReady',
+									onBridgeReady);
+							document.attachEvent('onWeixinJSBridgeReady',
+									onBridgeReady);
+						}
+					} else {
+						onBridgeReady();
+					}
+				});
+		function toPay(dom) {
+			if (submit) {
+				return;
+			}
+			submit = true;
+			//传递code和state去addOrder增加订单
+			var order = {};
+			order.orderCode=$(dom).attr('orderCode');
+			order.openid = $('#openid').val();
+			//获取数据后，拉起支付界面
+			$.ajax({
+				type : "POST",
+				url : "/bxNuoOrder/getPreData",
+				async : true,
+				data : order,
+				success : function(data) {
+					onBridgeReady(data.data);
+				}
+			});
+		}
+		function onBridgeReady(data) {
+
+			//拉起支付
+			var payd = eval('(' + data + ')');
+			WeixinJSBridge
+					.invoke(
+							'getBrandWCPayRequest',
+							{
+								"appId" : payd.appId,
+								"timeStamp" : payd.timeStamp,
+								"nonceStr" : payd.nonceStr,
+								"package" : payd.pack_age,
+								"signType" : payd.signType,
+								"paySign" : payd.paySign
+							},
+							function(res) {
+								submit = false;
+								if (res.err_msg == "get_brand_wcpay_request:ok") {
+									//调用设备写信息
+									alert("支付成功");
+									refTAB.open(2);
+								} else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+									alert("取消支付");
+								} else {
+									alert("支付失异常,请联系客服。");
+								}
+							});
+		}
+		/**
+	     * 前往物流信息页面
+	     */
+	    function lookWuliu(par){
+			if(par==null){
+				alert('暂未获取到物流信息，请等待发货。');
+				return;
+			}
+	    	window.location.href='/bxNuoOrder/selectOrderWuliu?wuliuid='+par;
+	    }
+		//支付结束
+	</script>
+</html>

@@ -11,12 +11,12 @@ public class WxPayConfig {
     public static final String SIGN_TYPE = "MD5";
  
     /**微信支付商户号*/
-    public static final String MCH_ID = "1510530611";
+    public static final String MCH_ID = "1526827921";
     /**编码 */
     public static String CHARTSET = "UTF-8";
  
-    /**微信支付API秘钥*/
-    public static final String KEY = "2082493C24C9480EAB052C3FF110AF57";
+    /**微信支付API秘钥 ，在账户中心的api安全中设置*/
+    public static final String KEY = "eb508a73ee83d9697a5319f2234b04c7";
  
     /**微信支付api证书路径*/
     public static final String CERT_PATH = "***/apiclient_cert.p12";
@@ -28,7 +28,7 @@ public class WxPayConfig {
     public static final String REFUND_URL = "https://api.mch.weixin.qq.com/secapi/pay/refund";
  
     /**微信支付通知url*/
-    public static final String NOTIFY_URL = "http://app.cdqckj.com/pay/wex/callBack";
+    public static final String NOTIFY_URL = "http://www.banxue.fun/bxNuoOrder/wex/callBack";
  
     /**微信交易类型:公众号支付*/
     public static final String TRADE_TYPE_JSAPI = "JSAPI";

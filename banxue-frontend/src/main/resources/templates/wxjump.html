@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta charset="utf-8">
+
+<meta name="description" content="User index">
+<meta name="keywords" content="User index">
+
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>正在跳转...</title>
+
+	<script type="text/javascript" src="/utils/js/jquery.min.js"></script>
+
+</head>
+<body style="background-color: #f4f4f4;">
+<input type="hidden" id="jumpAddr" th:value="${jumpAddr}" />
+	<script>
+		var jumpAddr=$('#jumpAddr').val();
+		var r_uri='http://www.banxue.fun/wx/getWxSignJumpage/';
+		r_uri=encodeURIComponent(r_uri);
+		console.log(r_uri);
+		window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24afd57c69514a36&redirect_uri='+r_uri+'&response_type=code&scope=snsapi_userinfo&state='+jumpAddr+'#wechat_redirect';
+	</script>
+</body>
+
+</html>

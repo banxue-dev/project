@@ -38,7 +38,7 @@ public class PayUtils {
 		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 		// SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
 		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-		model.setBody(order.getOrderRemark());
+		model.setBody(order.getOrderDesc());
 		model.setSubject("标题");
 		model.setOutTradeNo(order.getOrderNo());
 		model.setTimeoutExpress("30m");// 一般用不到这个
@@ -72,7 +72,7 @@ public class PayUtils {
 //
 //			// state可以为任何含义，根据你前端需求，这里暂时叫商品id
 //			// 授权码、商品id
-//			System.out.println("code=" + code + ",state=" + state);
+//			FileLog.debugLog("code=" + code + ",state=" + state);
 
 			/**
 			 * 第二步：通过code换取网页授权access_token
@@ -92,7 +92,7 @@ public class PayUtils {
 			// 订单金额，应该是根据state（商品id）从数据库中查询出来
 			String order_price = String.valueOf(order.getPayPrice());
 			// 商品描述，应该是根据state（商品id）从数据库中查询出来
-			String body = order.getOrderRemark();
+			String body = order.getOrderDesc();
 
 			/**
 			 * 第三步：统一下单接口
@@ -118,7 +118,7 @@ public class PayUtils {
 			// 商品金额,以分为单位
 			reqHandler.setParameter("total_fee", order_price);
 			// APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
-			reqHandler.setParameter("spbill_create_ip", "123.57.58.123");
+			reqHandler.setParameter("spbill_create_ip", "120.77.148.235");
 			// 下面的notify_url是用户支付成功后为微信调用的action 异步回调.
 			reqHandler.setParameter("notify_url", WxPayConfig.NOTIFY_URL);
 			// 交易类型,取值如下：JSAPI，NATIVE，APP，详细说明见参数规定
@@ -139,13 +139,13 @@ public class PayUtils {
 			String requestXml;
 			requestXml = reqHandler.getRequestXml();
 
-			System.out.println("requestXml:" + requestXml);
+			FileLog.debugLog("requestXml:" + requestXml);
 
 			// 得到的预支付id
 			String prepay_id;
 			prepay_id = ServiceUtil.unifiedorder(requestXml);
 
-			// System.out.println("params:" + JSONObject.parse.toString());
+			// FileLog.debugLog("params:" + JSONObject.parse.toString());
 
 			// 生成支付签名,这个签名 给 微信支付的调用使用
 			SortedMap<Object, Object> signMap = new TreeMap<Object, Object>();
@@ -153,11 +153,11 @@ public class PayUtils {
 			signMap.put("timeStamp", timestamp);
 			signMap.put("nonceStr", noncestr);
 			signMap.put("package", "prepay_id=" + prepay_id);
-			signMap.put("signType", "MD5");
+			signMap.put("signType", WxPayConfig.SIGN_TYPE);
 
 			// 微信支付签名
 			String paySign = WeixinUtils.createSign(signMap, WxPayConfig.KEY);
-			System.out.println("PaySIGN:" + paySign);
+			FileLog.debugLog("PaySIGN:" + paySign);
 
 			// 微信分配的公众账号ID（企业号corpid即为此appId）
 			JSONObject res = new JSONObject();

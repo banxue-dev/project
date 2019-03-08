@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>确认订单</title>
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
+	name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<link href="/onlinemail/css/style.css" rel="stylesheet"
+	type="text/css" />
+<link href="/onlinemail/css/jquery.spinner.css" rel="stylesheet"
+	type="text/css" />
+<style type="text/css">
+.el-row {
+	box-sizing: border-box;
+}
+
+.scolleShow {
+	overflow: auto;
+	padding-top: 1em;
+	height: 60px;
+}
+
+.addAddressCons {
+	font-weight: bold;
+}
+
+.addAddress {
+	float: right;
+	color: #05226C;
+	cursor: pointer;
+}
+</style>
+</head>
+<body style="background: #f7f7f7">
+	<section class="aui-flexView">
+		<header class="aui-navBar aui-navBar-fixed" style="z-index: 10;display:none;">
+
+			<div class="aui-center">
+				<span class="aui-center-title"> 确认订单 </span>
+			</div>
+			<a href="javascript:;" class="aui-navBar-item"> <i
+				class="icon icon-sys"> </i>
+			</a>
+		</header>
+		<section class="aui-scrollView">
+			<div class="aui-order-box">
+				<div class="aui-choice-white aui-mar15">
+					<div class="el-row">
+						<span class="addAddressCons"> 收货人信息 </span> <span
+							class="addAddress" onclick="show_new_addr()"> 新增收货地址 </span>
+					</div>
+					<div class="scolleShow" onclick="show_new_addrList()">
+						<div style="float: left; width: 10%; text-align: center;">
+							<img style=""
+								src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1774154279,222745206&fm=26&gp=0.jpg"
+								width="20" height="20" />
+						</div>
+						<div style="display: inline; float: left; width: 80%;">
+							<div>
+								收货人:<label th:text="${addr.userName}">唐杰</label><label th:text="${addr.addrPhone}" style="float: right;">135264594089</label>
+							</div>
+							<div style="font-size: 12px;padding-top:0.2em;">
+								收货地址:<label th:text="${addr.addrZone}">四川省达州市宣汉县</label><label th:text="${addr.addrDetail}">其云溪路112号</label>
+							</div>
+						</div>
+						<div
+							style="display: inline; float: left; width: 10%; text-align: center;">
+							<div style="">&gt;</div>
+						</div>
+					</div>
+					<div class="scolleShow" style="display: none;"
+						onclick="show_new_addr()">
+						<div style="text-align: center;">请添加收货地址!</div>
+					</div>
+				</div>
+				<!---->
+				<div class="aui-flex aui-choice-white">
+					<div class="aui-flex-box">
+						<h1>商品清单1件</h1>
+					</div>
+				</div>
+				<div class="aui-flex aui-flex-default aui-mar15">
+					<div class="aui-flex-goods">
+						<img th:src="${goods.goodsTitleImg}" alt="">
+					</div>
+					<div class="aui-flex-box">
+						<h2 th:text="${goods.goodsName}">开发定金</h2>
+						<p></p>
+						<div class="aui-flex aui-flex-clear">
+							<div>￥</div><div class="aui-flex-box"  th:text="${goods.goodsPrice}">29.00</div>
+							<input type="hidden" th:value="${goods.goodsPrice}" id="siglePrice" />
+							<div><input type="text" id="procount" class="spinnerExample"/></div>
+						</div>
+					</div>
+				</div>
+				<div class="aui-flex aui-choice-white b-line">
+					<div class="aui-flex-box">配送方式</div>
+					<div class="aui-flex-triangle">快递运输</div>
+				</div>
+				<div class="aui-flex aui-choice-white b-line">
+					<div class="aui-flex-box">优惠活动</div>
+					<div class="aui-flex-triangle">新品促销优惠 -￥10</div>
+				</div>
+				<div class="aui-flex aui-choice-white  aui-mar15">
+					<div class="aui-flex-box">发票信息</div>
+					<div class="aui-flex-triangle">暂不可开发票</div>
+				</div>
+				<div class="aui-flex aui-choice-white ">
+					<div class="aui-flex-box">
+						<h2>
+							商品总价 <label>￥</label><label id="totalPrice" style="float: right;" th:text="${goods.goodsPrice}"> 300 </label>
+						</h2>
+						<h3>
+							优惠金额 <label style="float: right; color: #666;"> -￥10 </label>
+						</h3>
+						<p></p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<footer class="aui-bar-footer">
+			<div class="aui-flex">
+				<div class="aui-flex-box">
+					应付金额： <em>￥</em><em id="totalPrice2" th:text="${goods.goodsPrice}" > 19.00 </em>
+				</div>
+				<div class="aui-btn-button" onclick="toPay();">
+					<button>立即支付</button>
+				</div>
+			</div>
+		</footer>
+	</section>
+	
+	<input  type="hidden" id="openid" th:value="${openid}" />
+	<input  type="hidden" id="goodsid" th:value="${goods.goodsId}" />
+	<script src="/utils/js/jquery.min.js"></script>
+	<script src="/onlinemail/js/city.js"></script>
+	<script src="/onlinemail/js/jquery.spinner.js"></script>
+	<script>
+		//防止重复点击
+		var submit = false;
+
+		$(document).ready(
+				function() {
+					$('.click_li').click(function(t) {
+						$('.click_li').removeClass('selected');
+						$(this).addClass('selected');
+						var price = $(this).attr('price');
+						$('.rechnum').html(price + '.00 元');
+					});
+					//绑定微信事件
+					if (typeof WeixinJSBridge == "undefined") {
+						if (document.addEventListener) {
+							document.addEventListener('WeixinJSBridgeReady',
+									onBridgeReady, false);
+						} else if (document.attachEvent) {
+							document.attachEvent('WeixinJSBridgeReady',
+									onBridgeReady);
+							document.attachEvent('onWeixinJSBridgeReady',
+									onBridgeReady);
+						}
+					} else {
+						onBridgeReady();
+					}
+				});
+		function toPay() {
+			if (submit) {
+				return;
+			}
+			submit = true;
+			//传递code和state去addOrder增加订单
+			var order = {};
+			order.buyCount=$('#procount').val();
+			order.orderRemark = '购买挪车码';
+			order.openid = $('#openid').val();
+			order.goodsId = $('#goodsid').val();
+			//获取数据后，拉起支付界面
+			$.ajax({
+				type : "POST",
+				url : "/bxNuoOrder/getPreData",
+				async : true,
+				data : order,
+				success : function(data) {
+					onBridgeReady(data.data);
+				}
+			});
+		}
+		function onBridgeReady(data) {
+
+			//拉起支付
+			var payd = eval('(' + data + ')');
+			WeixinJSBridge
+					.invoke(
+							'getBrandWCPayRequest',
+							{
+								"appId" : payd.appId,
+								"timeStamp" : payd.timeStamp,
+								"nonceStr" : payd.nonceStr,
+								"package" : payd.pack_age,
+								"signType" : payd.signType,
+								"paySign" : payd.paySign
+							},
+							function(res) {
+								var openid=$('#openid').val();
+								if (res.err_msg == "get_brand_wcpay_request:ok") {
+									window.location.href='/bxNuoOrder/toOrderListPage/?openid='+openid;
+								} else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+									window.location.href='/bxNuoOrder/toOrderListPage/?openid='+openid;
+								} else {
+									window.location.href='/bxNuoOrder/toOrderListPage/?openid='+openid;
+								}
+								submit = false;
+							});
+		}
+		//支付结束
+	</script>
+	<script>
+		function show_new_addr(){
+			window.location.href='/bxNuoAddr/toNewAdd?openid='+$('#openid').val()+'&goodsId='+$('#goodsid').val();
+		}
+		function show_new_addrList(){
+			window.location.href='/bxNuoAddr/toListPage?openid='+$('#openid').val()+'&goodsId='+$('#goodsid').val();
+		}
+		$('.spinnerExample').spinner({value:1,min:1});
+	</script>
+</body>
+
+</html>

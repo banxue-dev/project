@@ -1,20 +1,12 @@
 package com.banxue.utils;
  
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
  
 import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.FileOutConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
-import com.baomidou.mybatisplus.generator.config.TemplateConfig;
 import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
-import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
@@ -77,7 +69,7 @@ public class MpGenerator {
         // strategy.setCapitalMode(true);// 全局大写命名 ORACLE 注意
 //        strategy.setTablePrefix(new String[] { "bx_nuo" });// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[] { "customer_info" }); // 需要生成的表
+        strategy.setInclude(new String[] { "bx_nuo_sale","bx_nuo_order","bx_nuo_goods","bx_nuo_addr","bx_nuo_order_by_goods" }); // 需要生成的表
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
         // 自定义实体父类
         // strategy.setSuperEntityClass("com.baomidou.demo.TestEntity");
@@ -101,7 +93,7 @@ public class MpGenerator {
  
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.banxue.CustomerInfo");
+        pc.setParent("com.banxue.onlinemail");
 //        pc.setModuleName("test");
         mpg.setPackageInfo(pc);
  

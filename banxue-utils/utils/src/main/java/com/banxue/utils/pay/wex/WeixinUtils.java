@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import com.banxue.utils.MD5Utils;
+import com.banxue.utils.log.FileLog;
 
 /**
 作者：fengchase
@@ -34,6 +35,7 @@ public class WeixinUtils {
             }
         }
         sb.append("key=" + key);
+        FileLog.debugLog("加密之前的sign"+sb.toString());
         String sign =  MD5Utils.MD5Encode(sb.toString(), WxPayConfig.CHARTSET).toUpperCase();
         return sign;
     }

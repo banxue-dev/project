@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxue.onlinemail.mapper.BxNuoWuliuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.banxue.onlinemail.entity.BxNuoWuliu">
+        <id column="wuliu_id" property="wuliuId" />
+        <result column="wuliu_code" property="wuliuCode" />
+        <result column="wuliu_compan_code" property="wuliuCompanCode" />
+        <result column="wuliu_compan_name" property="wuliuCompanName" />
+        <result column="wuliu_phone_last" property="wuliuPhoneLast" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+</mapper>

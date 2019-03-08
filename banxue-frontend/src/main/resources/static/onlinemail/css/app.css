@@ -1,0 +1,444 @@
+/* reset */
+/**/
+* {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	border: 0;
+	font-weight: 400;
+	font-family: Tahoma, Arial, Roboto, 'Droid Sans', 'Helvetica Neue', 'Droid Sans Fallback', 'Heiti SC', 'Microsoft YaHei', sans-self;
+}
+a {
+	text-decoration: none;
+	outline: none;
+}
+em, i {
+	font-style: normal;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+input {
+	outline: none;
+}
+html {
+	background: #353535;
+}
+html, body {
+	min-height: 100%;
+}
+body {
+	background: #fff;
+	background-size: cover;
+	font-size: 0.35rem;
+	max-width: 640px;
+	margin: 0 auto;
+	position: relative;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+hr {
+	margin: 0 0.1rem;
+	border: 0px none;
+	border-top: 1px solid #eee;
+}
+.swiper-container {
+	width: 100%;
+	max-width: 640px;
+}
+.swiper-container .swiper-slide {
+	text-align: center;
+	font-size: 18px;
+	background: #fff;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+.swiper-container .swiper-pagination-bullet {
+	height: 13px;
+	width: 13px;
+}
+.swiper-container img {
+	width: 100%;
+	max-width: 100%;
+}
+.item {
+	background: #f8f8f8;
+	color: #555;/*标题价格*/
+  /*sku*/
+  /*详细内容*/
+  /**/
+  /**/
+}
+.item .home {
+	max-width: 640px;
+	width: 100%;
+	height: 0.6rem;
+	background: #F7F7F7;
+	position: fixed;
+	top: 0;
+	z-index: 99;
+}
+.item .home a {
+	height: 0.6rem;
+	display: block;
+	background: url(../images/logo.png) no-repeat center;
+	background-size: auto 0.45rem;
+}
+.item .images {
+	padding-top: 0.6rem;
+}
+.item section.header {
+	height: auto;
+	padding: 0.1rem;
+	overflow: hidden;
+	background-color: #fff;/**/
+}
+.item section.header h2.title {
+	font-weight: 400;
+	margin: 0;
+	padding: 0 0.1rem;
+	font-size: 0.28rem;
+	line-height: 0.3rem;
+	text-align: left;
+	display: block;
+}
+.item section.header .price {
+	padding: 0.1rem 0.1rem 0.05rem 0.1rem;
+	text-align: left;/**/
+}
+.item section.header .price .current-price {
+	color: #c00;
+	display: inline-block;
+	font-size: 0.4rem;
+	vertical-align: middle;
+}
+.item section.header .price .current-price small {
+	font-size: 0.25rem;
+}
+.item section.header .price .express {
+	padding: 0.05rem 0.1rem 0.05rem 0.3rem;
+	font-size: 0.18rem;
+	color: #fff;
+	text-align: left;
+	border-radius: 3px;
+	background: #333 url(/onlinemail/images/express.svg) no-repeat 0.05rem center;
+	background-size: 0.18rem;
+}
+.item section.header .sales {
+	background-color: #fafafa;
+	padding: 0.1rem 0.1rem;
+	font-size: 0.18rem;
+	color: #666;
+	margin-top: 0.1rem;
+}
+.item .sku {
+	padding: 0.2rem;
+	margin-top: 0.15rem;
+	background-color: #fff;
+}
+.item .sku .sku-group {
+	padding: 0 0.1rem;
+	overflow: hidden;
+	font-size: 0.25rem;
+	position: relative;
+}
+.item .sku .sku-group dt {
+	float: left;
+	color: #999;
+}
+.item .sku .sku-group dd {
+	margin-left: 0.6rem;
+	display: block;
+	word-wrap: break-word;
+}
+.item .sku .sku-group:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: 0.2rem;
+	margin-top: -5px;
+	width: 6px;
+	height: 10px;
+	background: url("https://b.yzcdn.cn/v2/image/wap/showcase/goods/goods@2x_c9431a6d41.png") no-repeat;
+	background-position: -40px -18px;
+	background-size: 58px 48px;
+}
+.item .content {
+	padding: 0 0.1rem 1.1rem 0.1rem;
+	background: #fff;
+	margin-top: 0.15rem;
+	overflow: hidden;
+}
+.item .content .nav {
+	font-size: 0.3rem;
+	overflow: hidden;
+	border-bottom: 1px solid #f1f1f1;
+}
+.item .content .nav a {
+	color: #444;
+	text-align: center;
+	width: 100%;
+	display: block;
+	float: left;
+	margin: 0.2rem 0;
+	border-right: 1px solid #f1f1f1;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+.item .content .nav a:last-child {
+	border: none;
+}
+.item .content .nav a.active {
+	color: #1e88e5;
+}
+.item .content img {
+	max-width: 100% !important;
+}
+.item .footer {
+	max-width: 640px;
+	width: 100%;
+	height: 0.8rem;
+	bottom: 0;
+	position: fixed;
+	background: rgba(255, 255, 255, 0.9);
+}
+.item .footer span.server {
+	height: 0.6rem;
+	width: 0.6rem;
+	padding: 0.1rem;
+	display: inline-block;
+}
+.item .footer span.server a {
+	background: #eee url(/onlinemail/images/kefu.svg) no-repeat center;
+	background-size: 0.5rem;
+	display: block;
+	height: 0.6rem;
+	width: 0.6rem;
+	border-radius: 3px;
+}
+.item .footer .button {
+	position: absolute;
+	top: 0.1rem;
+	right: 0.1rem;
+	left: 0.9rem;
+}
+.item .footer .button a {
+	background: #1e88e5;
+	display: block;
+	color: #fff;
+	line-height: 0.6rem;
+	text-align: center;
+	font-size: 0.28rem;
+	border-radius: 3px;
+}
+.item .layer {
+	position: fixed;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	background: rgba(0, 0, 0, 0.9);
+	max-width: 640px;
+	visibility: hidden;
+}
+.item .layer .content {
+	visibility: hidden;
+	transition: 0.5s all;
+	-webkit-transition: 0.5s all;
+	-moz-transition: 0.5s all;
+	-o-transition: 0.5s all;
+	-ms-transition: 0.5s all;
+	transform: translateY(20%);
+	opacity: 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	max-width: 640px;
+}
+.item .layer .content .head {
+	width: 100%;
+	height: 0.8rem;
+	background: #fff;
+	color: #000;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+.item .layer .content .head a.close {
+	height: 0.8rem;
+	width: 0.8rem;
+	background: url(/onlinemail/images/close.svg) no-repeat center;
+	background-size: 0.5rem;
+	right: 0.1rem;
+	top: 50%;
+	margin-top: -0.4rem;
+	display: block;
+	position: absolute;
+	cursor: pointer;
+}
+.item .layer .content .bd {
+	padding: 0.2rem;
+	background: #F7F7F7;
+	overflow: hidden;
+}
+.item .layer .content .bd dl {
+	padding: 0.1rem 0;
+	color: #888;
+	padding-left: 70px;
+	font-size: 0.22rem;
+	display: block;
+	overflow: hidden;
+}
+.item .layer .content .bd dl dt {
+	margin-left: -70px;
+	float: left;
+	display: inline;
+	width: 60px;
+	white-space: nowrap;
+	text-align: right;
+}
+.item .layer .content .bd dl dd span {
+	color: #c00;
+	font-size: 0.24rem;
+	vertical-align: middle;
+}
+.item .layer .content .bd dl dd span b {
+	font-size: 0.24rem;
+}
+.item .layer .content .bd dl dd li {
+	float: left;
+	position: relative;
+	margin-right: 0.1rem;
+	outline: none;
+}
+.item .layer .content .bd dl dd li a {
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	background: #fff;
+	display: inline-block;
+	color: #666;
+	padding: 0.08rem 0.15rem;
+	border-radius: 3px;
+}
+.item .layer .content .bd dl dd li a.active {
+	border-color: #1e88e5;
+	color: #1e88e5;
+}
+.item .layer .content .bd dl dd li a img {
+	height: 0.6rem;
+	width: 0.6rem;
+}
+.item .layer .content .foot {
+	padding: 0.1rem;
+}
+.item .layer .content .foot a {
+	background: #1e88e5;
+	display: block;
+	color: #fff;
+	line-height: 0.6rem;
+	text-align: center;
+	font-size: 0.28rem;
+	border-radius: 3px;
+}
+.item .acitve {
+	visibility: visible;
+}
+.item .acitve .content {
+	transform: translateY(0);
+	opacity: 1;
+	display: block;
+	visibility: visible;
+}
+.buy {
+	height: 100%;
+	background: #f8f8f8;/**/
+}
+.buy .header {
+	padding: 0.5rem 0;
+	width: 100%;
+	position: relative;
+	background: #555 url(../svg/iconfont-address.svg) no-repeat 0.15rem center;
+	background-size: 0.4rem;
+}
+.buy .header span.address {
+	padding-left: 0.8rem;
+	padding-right: 0.2rem;
+	overflow: hidden;
+	display: block;
+}
+.buy .header span.address p {
+	width: 100%;
+	font-size: 0.24rem;
+	color: #fff;
+	display: block;
+}
+.buy .header span.address p.name {
+	font-size: 0.26rem;
+	font-weight: bold;
+}
+.buy .header span.address p.edit {
+	text-align: right;
+}
+.buy .header span.address p a {
+	color: #1e88e5;
+}
+.buy .goods {
+	margin-top: 0.3rem;
+	padding: 0rem 0.2rem;
+	background: #fff;
+}
+.buy .goods ul, .buy .goods li {
+	overflow: hidden;
+}
+.buy .goods li {
+	position: relative;
+	border-bottom: 1px solid #eee;
+	padding: 0.2rem 0;/**/
+  /**/
+}
+.buy .goods li img {
+	width: 1.2rem;
+	height: 1.2rem;
+	border-radius: 3px;
+	float: left;
+	display: block;
+}
+.buy .goods li span {
+	height: 1.2rem;
+	display: block;
+	padding-left: 1.3rem;
+}
+.buy .goods li span p {
+	width: 100%;
+	height: 0.4rem;
+	font-size: 0.24rem;
+	color: #333;
+	overflow: inherit;
+}
+.buy .goods li span p.sku {
+	line-height: 0.8rem;
+	font-size: 0.18rem;
+	color: #666;
+}
+.buy .goods li span p.price {
+	color: #c00;
+	line-height: 0.55rem;
+	font-size: 0.2rem;
+}
