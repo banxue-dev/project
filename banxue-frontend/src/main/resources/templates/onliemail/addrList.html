@@ -104,7 +104,8 @@
 				</div>
 			</header>
 			<section class="aui-scrollView">
-				<div class="scolleShow" style="height: 40px" th:each="addr : ${datas}">
+				<div th:each="addr : ${datas}" >
+				<div class="scolleShow" style="height: 40px" >
 					<div style="display: inline; float: left; width: 80%; padding-left: 7px;" th:attr="data-id=${addr.addrId}" onclick="callbacka(this)" >
 						<div>
 							<label th:text="${addr.userName}" id="r_name">唐杰</label><label
@@ -121,7 +122,9 @@
 							style="line-height: 40px; color: #555; margin-left：7px; font-size: 14px; cursor: pointer;"
 							onclick="show_new_addrEdit(this)" th:attr="addrId=${addr.addrId}">编辑</div>
 					</div>
-					<hr size="1" />
+					
+				</div>
+				<hr size="1"  />
 				</div>
 			</section>
 		</section>
