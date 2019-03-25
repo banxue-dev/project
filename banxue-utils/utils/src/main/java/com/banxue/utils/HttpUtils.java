@@ -53,6 +53,7 @@ public class HttpUtils {
 			HttpEntity he = resp.getEntity();
 			respContent = EntityUtils.toString(he, "UTF-8");
 		}
+		client.close();
 		FileLog.debugLog("返回状态："+resp.getStatusLine().getStatusCode());
 		return respContent;
 	}
