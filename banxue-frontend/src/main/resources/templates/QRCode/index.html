@@ -17,7 +17,7 @@
 <body style="background-color: #f4f4f4;">
 	<div id="_main" class="main"
 		style="width: 100%; background-color: #f4f4f4;">
-		<div id="_logo" class="_logo" style="width: 100%;text-align: center;background-color: white;padding-top: 5px;">
+		<div id="_logo" class="_logo" style="display:none;width: 100%;text-align: center;background-color: white;padding-top: 5px;">
 			<img id="_logo_img" src="/QRCode/img/_head.jpg"
 				style="width: 90%;" />
 		</div>
@@ -33,7 +33,7 @@
 							th:text="${nickname}">用户</label>
 					</div>
 					<div style="margin-top: 3px;" th:text="${message}">若需要挪车</div>
-					<div style="margin-top: 20px; font-size: 14px;">请确认他的车牌号：</div>
+					<div style="margin-top: 20px; font-size: 16px;font-weight:bolder">请确认他的车牌号：</div>
 					<div class="car_input">
 						<ul class="clearfix ul_input" id="view_pai">
 							<li class="input_pro"><span></span></li>
@@ -52,24 +52,24 @@
 				style="width: 100%; height: 30%; margin-top: 1px; background-color: #f4f4f4;">
 				<div onclick="callUserPhone()"
 					style="width: 49.7%; text-align: center; display: inline; height: 100%; float: left; background-color: white;">
-					<img src="/QRCode/img/phone.png" width="40px" height="40px" /><br />
+					<img src="/QRCode/img/phone1.png" width="40px" height="40px" /><br />
 					拨打电话
 				</div>
 				<div onclick="sendWxMessage();"
 					style="width: 49.7%; text-align: center; display: inline; height: 100%; float: right; background-color: white;">
-					<img src="/QRCode/img/message.png" width="40px" height="40px" /><br />
+					<img src="/QRCode/img/message1.png" width="40px" height="40px" /><br />
 					微信提示
 				</div>
 			</div>
 		</div>
 		
 		<input type="hidden" id="cardNo" th:value="${cardNo}" />
-		<div id="_bottom_comt" style="width: 100%; background-color: white;">
+		<div id="_bottom_comt" style="width: 100%; background-color: #EFEFF4;">
 			<input type="hidden" id="carNo" valid="required" tips="请选择车牌号!">
-			<div style="padding-left:2.5%;font-size:12px;color:red;">Tips:</div>
-			<div style="padding-left:2.5%;font-size:12px;color:red;">1.输入完成记得点击右下角的确认按钮哦。</div>
-			<div style="padding-left:2.5%;font-size:12px;color:red;">2.非新能源车最后一位车牌无需填写。</div>
-			<div style="padding-left:2.5%;font-size:12px;color:red;">3.想拥有自己的吉祥号二维码?淘宝搜索<label style="color:green;">半雪无忧挪车码。</label></div>
+			<div style="padding-left:2.5%;margin-top:7px;font-size:12px;color:#B5B5B6;">Tips:</div>
+			<div style="padding-left:2.5%;font-size:12px;margin-top:4px;color:#B5B5B6;">1.输入完成记得点击右下角的确认按钮哦。</div>
+			<div style="padding-left:2.5%;font-size:12px;margin-top:4px;color:#B5B5B6;">2.非新能源车最后一位车牌无需填写。</div>
+			<div style="padding-left:2.5%;font-size:12px;margin-top:4px;color:#B5B5B6;">3.想拥有自己的二维码?<a href="http://www.banxue.fun/wx/sendWxSignJumpage?jumpAddr=onliemail%2Findex" style="color:#0099ff;font-weight:bold;">点击购买</a></div>
 		</div>
 	</div>
 	<script type="text/javascript" src="/utils/js/jquery.min.js"></script>
@@ -89,9 +89,9 @@
 			//document.getElementById('_main').style.width=_screen.width-+"px";
 
 			$('#_main').css('height', (_screen.height));
-			$('#_content').css('height', (_screen.height * 0.5));
-			$('#_logo').css('height', (_screen.height * 0.16));
-			$('#_bottom_comt').css('height', (_screen.height * 0.34));
+			$('#_content').css('height', (_screen.height * 0.7));
+			//$('#_logo').css('height', (_screen.height * 0.16));
+			$('#_bottom_comt').css('height', (_screen.height * 0.3));
 			chepInit();
 		}
 		entity.codeBorder=false;
