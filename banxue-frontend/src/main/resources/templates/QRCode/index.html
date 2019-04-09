@@ -28,8 +28,8 @@
 					style="background-color: white; padding-top: 3px;">
 					<div style="background-color: white;">
 						<img th:src="${headurl}"
-							style="border-radius: 50%; display: inline-block; vertical-align: middle;"
-							width="40px" height="40px" />&nbsp;&nbsp;<label style=""
+							style="border-radius: 50%; display: inline-block; vertical-align: middle;width:20%;"
+							/>&nbsp;&nbsp;<label style="display:none;"
 							th:text="${nickname}">用户</label>
 					</div>
 					<div style="margin-top: 3px;" th:text="${message}">若需要挪车</div>
@@ -96,6 +96,7 @@
 			//$('#_logo').css('height', (_screen.height * 0.16));
 			$('#_bottom_comt').css('height', (_screen.height * 0.3));
 			$('._top').css('line-height',(_screen.height * 0.7*0.7/5.51734)+"px");
+			$('#_bottom_comt').css('line-height',(_screen.height * 0.3/8.445)+"px");
 			chepInit();
 		}
 		entity.codeBorder=false;
