@@ -14,9 +14,9 @@
 <link href="/QRCode/css/chep.css" rel="stylesheet" type="text/css" />
 
 </head>
-<body style="background-color: #f4f4f4;">
+<body >
 	<div id="_main" class="main"
-		style="width: 100%; background-color: #f4f4f4;">
+		style="width: 100%;">
 		<div id="_logo" class="_logo" style="display:none;width: 100%;text-align: center;background-color: white;padding-top: 5px;">
 			<img id="_logo_img" src="/QRCode/img/_head.jpg"
 				style="width: 90%;" />
@@ -33,7 +33,7 @@
 							th:text="${nickname}">用户</label>
 					</div>
 					<div style="margin-top: 3px;" th:text="${message}">若需要挪车</div>
-					<div style="margin-top: 20px; font-size: 16px;font-weight:bolder">请确认他的车牌号：</div>
+					<div style="margin-top: 20px; font-size: 16px;font-weight:bolder"><img src="/QRCode/img/tcar.png" style="width: 21px;vertical-align: middle;height: 20px;">&nbsp;请确认他的车牌号：</div>
 					<div class="car_input">
 						<ul class="clearfix ul_input" id="view_pai">
 							<li class="input_pro"><span></span></li>
@@ -49,18 +49,21 @@
 				</div>
 			</div>
 			<div class="_bottom"
-				style="width: 100%; height: 30%; margin-top: 1px; background-color: #f4f4f4;">
+				style="width: 100%; height: 30%; margin-top: 1px;">
 				<div onclick="callUserPhone()"
-					style="width: 49.7%; text-align: center; display: inline; height: 100%; float: left; background-color: white;">
+					style="width: 49.7%; text-align: center; display: inline; height: 100%; float: left; background-color: white;color:#38ADFF;">
 					<img src="/QRCode/img/phone1.png" width="40px" height="40px" /><br />
 					拨打电话
+					<p style="font-size: 12px;color: #CFCFCF;">匿名打电话<br>信息无泄漏</p>
 				</div>
 				<div onclick="sendWxMessage();"
-					style="width: 49.7%; text-align: center; display: inline; height: 100%; float: right; background-color: white;">
+					style="width: 49.7%; text-align: center; display: inline; height: 100%; float: right; background-color: white;color:#38ADFF;">
 					<img src="/QRCode/img/message1.png" width="40px" height="40px" /><br />
 					微信提示
+					<p style="font-size: 12px;color: #CFCFCF;">公众号通知<br>分秒间即达</p>
 				</div>
 			</div>
+			
 		</div>
 		
 		<input type="hidden" id="cardNo" th:value="${cardNo}" />
@@ -92,6 +95,7 @@
 			$('#_content').css('height', (_screen.height * 0.7));
 			//$('#_logo').css('height', (_screen.height * 0.16));
 			$('#_bottom_comt').css('height', (_screen.height * 0.3));
+			$('._top').css('line-height',(_screen.height * 0.7*0.7/5.51734)+"px");
 			chepInit();
 		}
 		entity.codeBorder=false;
