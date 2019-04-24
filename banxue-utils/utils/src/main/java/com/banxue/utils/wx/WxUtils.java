@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import com.alibaba.fastjson.JSONObject;
 import com.banxue.utils.HttpUtils;
+import com.banxue.utils.log.FileLog;
 import com.banxue.utils.pay.wex.pojo.WxTokenDO;
 
 /**
@@ -48,10 +49,12 @@ public class WxUtils {
     }
     
 	/**
-	 * 获取access_token
+	 * 获取js_api的access_token
 	 * @param appId
 	 * @param appsecret
-	 * @return
+	 * @return  
+	 * openId = openJson.getString("openid");
+			access_token = openJson.getString("access_token");
 	 * 2018年7月12日
 	 * 作者：fengchase
 	 */
@@ -69,12 +72,12 @@ public class WxUtils {
 	/**
 	 * 获取js调用凭据
 	 * @param access_token
-	 * @return
+	 * @return ticket
 	 * @throws Exception
 	 * 2018年10月23日
 	 * 作者：fengchase
 	 */
-	public String getJsapiTicket(String access_token) throws Exception {
+	public static String getJsapiTicket(String access_token) throws Exception {
 		String getticket_url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=";// 接口凭据
 
 		String jsonData = HttpUtils.getReString(getticket_url + access_token + "&type=jsapi");
@@ -94,9 +97,15 @@ public class WxUtils {
 	 *            凭据
 	 * @param url
 	 *            界面请求地址
-	 * @return V型知识库 www.vxzsk.com
+	 * @return 
 	 */
-	public JSONObject sign(String jsapi_ticket, String url) {
+	public static JSONObject sign(String jsapi_ticket, String url) {
+		try {
+			url=java.net.URLDecoder.decode(url,"UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO 打印输出日志
+			e1.printStackTrace();
+		}
 		JSONObject ret = new JSONObject();
 		String nonce_str = create_nonce_str();
 		String timestamp = create_timestamp();
@@ -105,13 +114,14 @@ public class WxUtils {
 
 		// 注意这里参数名必须全部小写，且必须有序
 		string1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonce_str + "&timestamp=" + timestamp + "&url=" + url;
-		System.out.println(string1);
+		System.out.println("生成sign的参数为："+string1);
 
 		try {
 			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
 			crypt.reset();
 			crypt.update(string1.getBytes("UTF-8"));
 			signature = byteToHex(crypt.digest());
+			FileLog.debugLog("signature:"+signature);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -125,11 +135,13 @@ public class WxUtils {
 		ret.put("noncestr", nonce_str);
 		ret.put("timestamp", timestamp);
 		ret.put("signature", signature);
+		ret.put("appId", appId);
+		
 
 		return ret;
 	}
 
-	private String byteToHex(final byte[] hash) {
+	private static String byteToHex(final byte[] hash) {
 		Formatter formatter = new Formatter();
 		for (byte b : hash) {
 			formatter.format("%02x", b);
@@ -139,7 +151,7 @@ public class WxUtils {
 		return result;
 	}
 
-	private String create_nonce_str() {
+	private static String create_nonce_str() {
 		return UUID.randomUUID().toString();
 	}
 

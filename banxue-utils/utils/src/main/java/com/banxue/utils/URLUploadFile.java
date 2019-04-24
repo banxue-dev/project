@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,9 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.junit.Test;
 
-import com.alibaba.fastjson.JSONObject;
 
 
 /**
@@ -193,7 +190,6 @@ public class URLUploadFile {
     return result;
   }
   
-  	@Test
   	public void test() {
   		Map<String, String> params=new HashMap<>(); Map<String, File> files=new HashMap<>();
   		File f=new File("d://ercode.jpg");

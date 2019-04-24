@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>添加信息窗口</title>
+<style type="text/css">
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body, button, input, select, textarea {
+	font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+}
+
+#info {
+	width: 603px;
+	padding-top: 3px;
+	overflow: hidden;
+}
+
+.btn {
+	width: 142px;
+}
+</style>
+<script charset="utf-8"
+	src="https://map.qq.com/api/js?v=2.exp&key=TYSBZ-5LRCW-XIERW-OF3O4-RWH6O-DKBWN"></script>
+ <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"> </script> 
+	<script src="/utils/js/jquery.min.js" type="text/javascript"></script>
+
+<body onload="init();">
+	<div style="width: 100%; height: 300px" id="container"></div>
+	<div style="width: 100%;" id="contentDiv" ></div>
+	<div style="width: 100%;" id="positionDiv" ></div>
+	<div style="width: 100%;" id="zIndexDiv"></div>
+	<div id="info" style="">
+		<button id="mapM" class="btn">setMap</button>
+		<button id="setP" class="btn">setPosition</button>
+	</div>
+	<div  id="showSelect" onclick="closeLabel();" style="z-index:99999;display:none;width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;background-color: #555;opacity: 0.5;text-align:center;">
+		<div id="mapsSelect" style="width: 100%;background-color: white;position: absolute;bottom:0;line-height: 50px;">
+			<p onclick="openLoactiontenxun();">腾讯地图</p>
+			<p onclick="openLoactionbaidu();">百度地图</p>
+		</div>
+	</div>
+	<script>
+	function getTicktData() {
+			var url = location.href.split('#')[0];
+			var str = {};
+			$.ajax({
+				url : '/qie/getTicket',
+				type:'post',
+				data : {
+					url : encodeURIComponent(url)
+				},
+				success : function(res) {
+					if (res.code == '000000') {
+						str = res.data;
+						wx.config({
+
+							debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+
+							appId : str.appId, // 必填，公众号的唯一标识
+
+							timestamp : str.timestamp, // 必填，生成签名的时间戳
+
+							nonceStr : str.noncestr, // 必填，生成签名的随机串
+
+							signature : str.signature,// 必填，签名
+
+							jsApiList : [ 'openLocation','getLocation' ]
+						// 必填，需要使用的JS接口列表 这里填写需要用到的微信api openlocation为使用微信内置地图查看位置接口
+
+						});
+						 wx.ready(function(res){
+							 getUserLocation(res);
+						});
+						
+					}
+				}
+			})
+		}
+		
+		function closeLabel(){
+			$('#showMapTo').hide();
+		}
+		function openLoaction1(){
+			
+			
+			wx.openLocation({
+			    latitude: locations.latitude, // 纬度，浮点数，范围为90 ~ -90
+			    longitude: locations.longitude, // 经度，浮点数，范围为180 ~ -180。
+			    name: '企鹅洗车长虹店', // 位置名
+			    address: '企鹅洗车长虹店', // 地址详情说明
+			    scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+			});
+
+		}
+		function openLoaction2(){
+			var uri= 'https://apis.map.qq.com/uri/v1/marker?marker=coord:39.892326,116.342763;title:企鹅洗车;addr:且洗车&referer=myapp'; 
+			$('#showMapTo').attr('src',uri);
+			setTimeout(function(){
+				$('#showHtmlTo').text($('iframe').contents().find('body').html());
+			},5000)
+
+		}
+		function openLoaction(){
+			$('#showSelect').show();
+
+		}
+		function openLoactiontenxun(){
+
+			$('#mapsSelect').hide();
+			window.location.href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&fromcoord=39.980683,116.302&to=中关村&tocoord=39.9836,116.3164&policy=0&referer=TYSBZ-5LRCW-XIERW-OF3O4-RWH6O-DKBWN";
+
+		}
+		function openLoactionbaidu(){
+
+			$('#mapsSelect').hide();
+			window.location.href="http://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:wojia&destination=latlng:34.364642646862,108.95108518068|name:nijia&mode=driving&region=xian&output=html&src=webapp.baidu.openAPIdemo";
+
+		}
+		var locations={};
+		function getUserLocation(){
+			wx.getLocation({
+				type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+				success: function (res) {
+					var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+					var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+					locations.latitude=latitude;
+					locations.longitude=longitude;
+					var speed = res.speed; // 速度，以米/每秒计
+					var accuracy = res.accuracy; // 位置精度
+					main(res);
+				}
+				});
+		}
+		var init=function(){
+			getTicktData();
+		}
+		var main = function(res) {
+			console.log("尽量了");
+			var center = new qq.maps.LatLng(res.latitude, res.longitude);
+			var map = new qq.maps.Map(document.getElementById('container'), {
+				center : center,
+				zoom : 15
+			});
+			var infoWin = new qq.maps.InfoWindow({
+				map : map
+			});
+
+			//open()打开信息窗口
+			infoWin.open();
+			infoWin.setPosition(map.getCenter());
+
+
+			//setContent()设置信息窗口显示区的内容
+			infoWin.setContent('<div onclick="openLoaction()">预计需要5分钟点击导航</div>');
+
+			//getContent()获取信息窗口中的内容
+			var contentDiv = document.getElementById('contentDiv');
+			contentDiv.innerHTML = "信息窗口的信息是:" + infoWin.getContent();
+
+			//getMap()获取信息窗口所在的map对象,setMap()设置信息窗口所在的map对象
+			var mapM = document.getElementById("mapM");
+			qq.maps.event.addDomListener(mapM, "click", function() {
+				if (infoWin.getMap()) {
+					infoWin.setMap(null);
+				} else {
+					infoWin.setMap(map);
+				}
+			});
+			//setPosition()设置信息窗口的位置，如需指向Marker的正上方，可使用Marker的实例作为position参数。
+			var flag = true;
+			var setP = document.getElementById("setP");
+			var latLng = new qq.maps.LatLng(locations.latitude, locations.longitude);
+			qq.maps.event.addDomListener(setP, "click", function() {
+				infoWin.setMap(map);
+				if (flag) {
+					flag = false;
+					infoWin.setPosition(latLng);
+				} else {
+					flag = true;
+					infoWin.setPosition(center);
+				}
+			});
+
+			//getPosition()获取信息窗口的坐标位置
+			var positionDiv = document.getElementById('positionDiv');
+			positionDiv.innerHTML = "信息窗口的坐标位置:" + infoWin.getPosition();
+
+			//setZIndex()设置信息窗口的zIndex值。getZIndex()获取信息窗口的zIndex值
+			infoWin.setZIndex(1000);
+			var zIndexDiv = document.getElementById('zIndexDiv');
+			zIndexDiv.innerHTML = "信息窗口的zIndex是:" + infoWin.getZIndex();
+
+			//设置信息窗口参数值
+			infoWin.setOptions({
+				map : map,
+				zIndex : 100
+			});
+
+		}
+	</script>
+	<iframe id="showMapTo" style="border:0px;width:100%;height:200px;" ></iframe>
+</body>
+
+</html>

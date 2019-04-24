@@ -50,7 +50,7 @@
 		<section class="aui-scrollView">
 			<div class="aui-order-box">
 				<div class="aui-choice-white aui-mar15" style="padding: 2px 2px 0px 2px;">
-					<div class="el-row">
+					<div class="el-row" style="display:none;">
 						<span class="addAddressCons"> 收货人信息 </span> <span
 							class="addAddress" onclick="show_new_addr()"> 新增收货地址 </span>
 					</div>
@@ -64,17 +64,17 @@
 							<div>
 								收货人:<label th:text="${addr.userName}">唐杰</label><label th:text="${addr.addrPhone}" style="float: right;">135264594089</label>
 							</div>
-							<div style="font-size: 12px;padding-top:0.2em;">
+							<div style="font-size: 12px;padding-top:1em;">
 								收货地址:<label th:text="${addr.addrZone}">四川省达州市宣汉县</label><label th:text="${addr.addrDetail}">其云溪路112号</label>
 							</div>
 						</div>
 						<div
-							style="display: inline; float: left; width: 10%; text-align: center;">
+							style="display: inline; float: left; width: 10%; text-align: center;margin-top:0.5em;">
 							<div style="">&gt;</div>
 						</div>
 					</div>
 					<div class="scolleShow" style="display: none;"
-						onclick="show_new_addr()">
+						onclick="show_new_addrList()">
 						<div style="text-align: center;">请添加收货地址!</div>
 					</div>
 				</div>
@@ -84,7 +84,7 @@
 						<h1>商品清单1件</h1>
 					</div>
 				</div>
-				<div class="aui-flex aui-flex-default aui-mar15">
+				<div class="aui-flex aui-flex-default aui-mar15" style="margin-bottom:0px;">
 					<div class="aui-flex-goods">
 						<img th:src="${goods.goodsTitleImg}" alt="">
 					</div>

@@ -26,6 +26,7 @@ import com.banxue.utils.log.FileLog;
 import com.banxue.utils.pay.wex.ServiceUtil;
 import com.banxue.utils.wx.StrXmlToMap;
 import com.banxue.utils.wx.WXBizMsgCrypt;
+import com.banxue.utils.wx.WxConstants;
 import com.banxue.utils.wx.WxMessageUtil;
 import com.banxue.utils.wx.WxUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -154,6 +155,7 @@ public class WxApiController {
 			JSONObject openJson = ServiceUtil.getOpenId(wxcode);
 			openId = openJson.getString("openid");
 			access_token = openJson.getString("access_token");
+			WxConstants.WxToken=access_token;
 			Wrapper<User> wrapper = new EntityWrapper<User>();
 			wrapper.where("wx_opend_id ={0}", openId);
 			request.setAttribute("openid", openId);
@@ -193,6 +195,7 @@ public class WxApiController {
 			request.setAttribute("nickname", user.getNickName());
 			request.setAttribute("message", user.getUserMessage());
 			request.setAttribute("openid", openId);
+//			request.setAttribute("accessToken", access_token);
 			String decodeUrl=URLDecoder.decode(state,"UTF-8");
 			this.fullDataInPage(decodeUrl,request);
 			return decodeUrl;
@@ -222,6 +225,8 @@ public class WxApiController {
 					
 				}*/
 				request.setAttribute("imgs", bng.getGoodsImgs().split(","));
+			}else if(StringUtils.twoStrMatch(addr, "test/qieclear")) {
+//				WxUtils.getJsapiTicket(request.getAttribute("accessToken").toString());
 			}
 		}catch(Exception e) {
 			FileLog.errorLog("获取数据异常："+e);;

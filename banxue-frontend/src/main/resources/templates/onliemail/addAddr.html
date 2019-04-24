@@ -41,8 +41,8 @@
 		style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; background-color: white; z-index: 20;">
 		<section class="aui-flexView">
 			<header class="aui-navBar aui-navBar-fixed">
-				<a href="javascript:;" onclick=")"
-					class="aui-navBar-item"> </a>
+				<a href="javascript:;" onclick="closeAddAddr()"
+					class="aui-navBar-item"></a>
 				<div class="aui-center">
 					<span class="aui-center-title"></span>
 				</div>
@@ -99,13 +99,17 @@
 	<script>
 		//防止重复点击
 		var submit = false;
-
+		entity.codeBorder=false;
+		function closeAddAddr(){
+			window.location.href='/bxNuoOrder/toPayPage/?goodsid='+$('#goodsid').val()+'&openid='+$('#userOpenid').val();
+		}
 		function addAddre() {
 			if (submit) {
 				return;
 			}
 			submit = true;
 			//传递code和state去addOrder增加订单
+			
 			var order = validateFrom('addFrom');
 			if(!order.res){
 				submit = false;
@@ -133,6 +137,7 @@
 		}
 	</script>
 	<script>
+		
 		/**
 		 * 默认调用
 		 */

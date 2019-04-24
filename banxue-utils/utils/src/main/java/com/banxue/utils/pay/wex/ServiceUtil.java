@@ -22,7 +22,7 @@ import com.banxue.utils.wx.WxUtils;
 */
 /**
  * 自定义类，在官方文档中没有
- * 
+ * 这里面是获取网页授权token，用于获取用户信息
  *
  */
 public class ServiceUtil {
