@@ -3,6 +3,7 @@ package com.banxue.banxueinterface;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +57,7 @@ public class BanxueInterfaceApplicationTests {
 //	        ax.axQueryBindRelation(null, "+8617360133424");
 //	        System.out.println(JSON.toJSONString(t));
 	}
-	@Test
+//	@Test
 	public void ppctest() {
 //		IAXInterfaceDemo ax = new AXInterfaceDemoImpl(HWConfig.OMPAPPKEY, HWConfig.OMPAPPSECRET, HWConfig.OMPDOMAINNAME);
 
@@ -88,6 +89,23 @@ public class BanxueInterfaceApplicationTests {
 		te.add("1789");
 		System.out.println("--"+te.toString());
 //        ax.axQueryBindRelation("1541577150153c5b100cfb53240d2917401c189b84164", null);
+	}
+
+	@Test
+	public  void testFankui() {
+		//?type=shunfeng&postid=708546710852&temp=456&phone=4089
+		List<Integer> list=new ArrayList<Integer>();
+		list.add(1);
+		list.add(2);
+		list.add(3);
+		list.add(4);
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		Integer s=0;
+		Consumer<Integer> cn=p->ppctest();
+//		System.out.println("测试");
+		list.forEach(t ->list.forEach(y -> y.min(t, y)));
 	}
 
 }

@@ -10,4 +10,4 @@ spring:
       active: pro
    mvc: 
       favicon: 
-         enabled: false
+         enabled: true

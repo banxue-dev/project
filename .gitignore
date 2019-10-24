@@ -19,3 +19,5 @@ banxue-utils/utils/.settings/org.eclipse.jdt.core.prefs
 banxue-utils/utils/.settings/org.eclipse.core.resources.prefs
 banxue-utils/utils/.project
 banxue-utils/utils/.classpath
+banxue-utils/utils/.gitignore
+*.gitignore

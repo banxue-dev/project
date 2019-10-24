@@ -59,9 +59,9 @@ public class MpGenerator {
             }
         });
         dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("feng");
-        dsc.setPassword("feng.123456");
-        dsc.setUrl("jdbc:mysql://120.77.148.235:3306/banxue-dev?useUnicode=true&characterEncoding=utf8");
+        dsc.setUsername("root");
+        dsc.setPassword("cuimeng123@");
+        dsc.setUrl("jdbc:mysql://rm-bp16bxcxs4ci5877mso.mysql.rds.aliyuncs.com:3306/shop_service_product?useUnicode=true&characterEncoding=UTF8");
         mpg.setDataSource(dsc);
  
         // 策略配置
@@ -69,7 +69,7 @@ public class MpGenerator {
         // strategy.setCapitalMode(true);// 全局大写命名 ORACLE 注意
 //        strategy.setTablePrefix(new String[] { "bx_nuo" });// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[] { "bx_nuo_wuliu" }); // 需要生成的表
+        strategy.setInclude(new String[] { "product_specifications_detail" }); // 需要生成的表
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
         // 自定义实体父类
         // strategy.setSuperEntityClass("com.baomidou.demo.TestEntity");
@@ -93,7 +93,8 @@ public class MpGenerator {
  
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.banxue.onlinemail");
+        pc.setParent("com.nongnongyigou.service.product");
+//        pc.setParent("com.banxue.onlinemail");
 //        pc.setModuleName("test");
         mpg.setPackageInfo(pc);
  
