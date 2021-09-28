@@ -52,12 +52,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.icepdf/icepdf-core -->
-		<dependency>
-			<groupId>com.collpen</groupId>
-			<artifactId>pdf</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 		<!--<dependency>
 
 			<groupId>org.apache.pdfbox</groupId>
